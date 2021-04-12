@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      favorecido_id: { //Relacionamento 1:1 para Favorecido
+      id_favorecido: { //Relacionamento 1:1 para Favorecido
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -29,15 +29,9 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade'
       },
-      banco_id: { //Relacionamento 1:1 para Banco
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'banco',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'
+      cod_banco: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       created_at:{
         type: Sequelize.DATE,
