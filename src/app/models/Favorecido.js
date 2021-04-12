@@ -10,5 +10,10 @@ module.exports = (sequilize, DataTypes) => {
         email: DataTypes.STRING,
     });
 
+    Favorecido.associate = function(models) {
+        //Relacionamento 1:N para Contas Bancárias
+        Favorecido.hasMany(models.BancoDoFavorecido, {as: 'favorecido_banco'})
+    };
+
     return Favorecido;
 }
