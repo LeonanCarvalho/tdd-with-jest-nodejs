@@ -105,3 +105,6 @@ dist
 
 # PHPStorm
 .idea
+
+# SQLite database
+dev.db
