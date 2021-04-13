@@ -31,7 +31,7 @@ const Schemes = {
     }
 }
 
-const defaultScheme  = {
+const defaultScheme = {
     agency: {
         maxLength: 4,
         required: true,
@@ -57,11 +57,10 @@ const defaultScheme  = {
 }
 
 
-
 class BancoController {
     constructor(cod, name) {
-        this.cod  = cod;
-        this.name  = name;
+        this.cod = cod;
+        this.name = name;
         this.scheme = Schemes[cod] || defaultScheme
     }
 
@@ -70,11 +69,12 @@ class BancoController {
         return true;
     }
 
-    isValidAccount(account){
+    isValidAccount(account) {
         console.log(this.scheme.agency)
         return true;
     }
 }
+
 module.exports = {
     BancoController: BancoController
 }

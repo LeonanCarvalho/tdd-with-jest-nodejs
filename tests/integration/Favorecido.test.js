@@ -5,11 +5,11 @@ const truncate = require('../utils/truncate')
 const factory = require('../factories')
 
 describe("Favorecido Integration", () => {
-    afterAll( async  ()=> {
+    afterAll(async () => {
         await truncate();
     })
     it("should create a CPF Favorecido with valid data", async () => {
-        const favorecido = await factory.create('FavorecidoPF',{})
+        const favorecido = await factory.create('FavorecidoPF', {})
 
         const response = await request(app)
             .post('/favorecido')
@@ -24,7 +24,7 @@ describe("Favorecido Integration", () => {
     })
 
     it("should create a CNPJ Favorecido with valid data", async () => {
-        const favorecido = await factory.create('FavorecidoPJ',{})
+        const favorecido = await factory.create('FavorecidoPJ', {})
 
         const response = await request(app)
             .post('/favorecido')
@@ -60,17 +60,19 @@ describe("Favorecido Integration", () => {
         expect("todo").toBe("todo");
     })
     it("should update Favorecido", async () => {
-        expect("todo").toBe("todo");
-        /*const favorecido = await factory.create('FavorecidoPJ',{})
+        const favorecido = await factory.create('FavorecidoPJ', {})
+
+        expect(favorecido).toHaveProperty("id")
+
         const response = await request(app)
             .put('/favorecido')
             .send({
-                id: 1,
+                id: favorecido.id,
                 email: "updatedmail@mock.com",
             })
 
         expect(response.status).toBe(200);
-        expect(favorecido.email).toBe("updatedmail@mock.com")*/
+        expect(favorecido.email).toBe("updatedmail@mock.com")
     })
     it("should delete Favorecido", async () => {
         expect("todo").toBe("todo");

@@ -12,12 +12,13 @@ class AppController {
     }
 
     middlewares() {
-        this.express.use(express.json({ limit: '50mb' }))
-        this.express.use(express.urlencoded({ extended: true, limit: '50mb' }));
+        this.express.use(express.json({limit: '50mb'}))
+        this.express.use(express.urlencoded({extended: true, limit: '50mb'}));
         this.express.use(helmet());
     }
+
     routes() {
-        this.express.use('/',require('./routes'))
+        this.express.use('/', require('./routes'))
         this.express.all('*', (req, res) => {
             res.status(404).json({
                 success: false,

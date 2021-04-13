@@ -11,7 +11,7 @@ module.exports = (sequilize, DataTypes) => {
         cod_banco: DataTypes.INTEGER,
     }, {});
 
-    BancoDoFavorecido.associate = function(models) {
+    BancoDoFavorecido.associate = function (models) {
         //Relacionamento 1:1 Favorecido
         BancoDoFavorecido.belongsTo(models.Favorecido,
             {foreignKey: 'id_favorecido', as: 'favorecido'})
