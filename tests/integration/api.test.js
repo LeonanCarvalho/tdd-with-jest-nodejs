@@ -6,13 +6,14 @@ describe('API Calls', () => {
     it('should receive http Status code 200 when call to  API', async () => {
 
         const response = await request(app)
-            .post('/favorecido')
-            .send({
-                name: "Jhon Doe",
-                doc: "565.646.640-01",
-                email: "jhondoe@mockemail.test",
-            })
+          .get('/')
+          .send();
 
-        expect(response.status).toBe(200);
+        expect(response.status)
+          .toBe(200);
+        expect(response.body)
+          .toHaveProperty('message');
+        expect(response.body.message())
+          .toBe('ok');
     })
 })

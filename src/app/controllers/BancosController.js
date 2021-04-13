@@ -4,64 +4,11 @@
  * @param DataTypes
  */
 
-const Schemes = {
-  '001': {
-    agency: {
-      maxLength: 4,
-      required: true,
-      pattern: /^(?:^0*)[1-9][0-9]{0,3}$/,
-      digit: {
-        required: false,
-        pattern: /^[xX0-9]{0,1}$/
-      }
-    },
-    account: {
-      maxLength: 8,
-      required: true,
-      pattern: /^(?:^0*)[1-9][0-9]{0,7}$/,
-      digit: {
-        required: true,
-        pattern: /^[xX0-9]{0,1}$/
-      }
-    },
-    accountType: {
-      required: true,
-      allowedTypes: ['CONTA_CORRENTE', 'CONTA_POUPANCA', 'CONTA_FACIL']
-    }
-  }
-};
+const { promisify } = require('util');
 
-const defaultScheme = {
-  agency: {
-    maxLength: 4,
-    required: true,
-    pattern: /^(?:^0*)[1-9][0-9]{0,3}$/,
-    digit: {
-      required: false,
-      pattern: /^[xX0-9]{0,1}$/
-    }
-  },
-  account: {
-    maxLength: 11,
-    required: true,
-    pattern: /^(?:^0*)[1-9][0-9]{0,10}$/,
-    digit: {
-      required: true,
-      pattern: /^[0-9]{0,1}$/
-    }
-  },
-  accountType: {
-    required: true,
-    allowedTypes: ['CONTA_CORRENTE', 'CONTA_POUPANCA']
-  }
-};
+const { Bancos } = require('../data/bancos');
 
 class BancoController {
-  constructor(cod, name) {
-    this.cod = cod;
-    this.name = name;
-    this.scheme = Schemes[cod] || defaultScheme;
-  }
 
   isValidAgency(agency) {
     console.log(this.scheme.agency);
@@ -72,8 +19,31 @@ class BancoController {
     console.log(this.scheme.agency);
     return true;
   }
+
+  async search(req, res, next) {
+    const verb = req.params.verb || null;
+    let result = [];
+
+    const filter = (field, toSearch) => {
+      return Bancos.filter(o => {
+        return o[field].includes(toSearch);
+      });
+    };
+
+    if (verb) {
+      result = [...new Set([
+        ...filter('cod', verb),
+        ...filter('name', verb)])
+      ];
+    } else {
+      result = Bancos;
+    }
+
+    res.locals.status = 200;
+    res.locals.result = result;
+    return next();
+  }
+
 }
 
-module.exports = {
-  BancoController: BancoController
-};
+module.exports = new BancoController();
