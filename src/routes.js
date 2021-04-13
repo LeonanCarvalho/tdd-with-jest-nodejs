@@ -26,6 +26,11 @@ routes.get('/bancos/:verb?', BancosController.search);
 routes.get('/bancos', BancosController.all);
 routes.get('/banco/:cod', BancosController.get);
 
+routes.get('*', ((req, res, next) => {
+  res.locals.status = 404;
+  return next();
+}));
+
 routes.use(responseSender());
 
 module.exports = routes;

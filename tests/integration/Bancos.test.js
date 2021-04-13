@@ -14,6 +14,8 @@ describe('Banco Integration', () => {
       .toHaveProperty('data');
     expect(response.body.data.length)
       .toBeGreaterThan(0);
+    expect(response.body.data[0].cod)
+      .toBe(verb);
   });
 
   it('should search by Name', async () => {
