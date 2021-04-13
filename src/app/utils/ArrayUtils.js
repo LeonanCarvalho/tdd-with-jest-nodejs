@@ -1,3 +1,5 @@
+const escapeStringRegexp = require('escape-string-regexp');
+
 /**
  * Realiza uma busca em array de objetos de um único nivel
  *
@@ -8,8 +10,7 @@
  * @returns {*}
  */
 const insensitiveFilter = (objArr, field, toSearch) => {
-  const sanitized = toSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const condition = new RegExp(sanitized, 'i');
+  const condition = new RegExp(escapeStringRegexp(toSearch), 'i');
   return objArr.filter(o => {
     return condition.test(o[field]);
   });
