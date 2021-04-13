@@ -20,20 +20,21 @@ class BancoController {
     return true;
   }
 
+  filter(field, toSearch) {
+    return Bancos.filter(o => {
+      return o[field].includes(toSearch);
+    });
+  };
+
   async search(req, res, next) {
     const verb = req.params.verb || null;
     let result = [];
 
-    const filter = (field, toSearch) => {
-      return Bancos.filter(o => {
-        return o[field].includes(toSearch);
-      });
-    };
-
     if (verb) {
       result = [...new Set([
         ...filter('cod', verb),
-        ...filter('name', verb)])
+        ...filter('name', verb)
+      ])
       ];
     } else {
       result = Bancos;
