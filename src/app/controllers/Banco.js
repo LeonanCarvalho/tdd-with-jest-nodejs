@@ -58,7 +58,7 @@ const defaultScheme  = {
 
 
 
-class Banco {
+class BancoController {
     constructor(cod, name) {
         this.cod  = cod;
         this.name  = name;
@@ -76,5 +76,5 @@ class Banco {
     }
 }
 module.exports = {
-    Banco: Banco
+    BancoController: BancoController
 }

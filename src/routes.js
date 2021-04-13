@@ -8,9 +8,9 @@ routes.get('/', ((req, res) => {
 }))
 routes.post ('/favorecido', FavorecidoController.create)
 routes.put ('/favorecido', FavorecidoController.update)
-routes.get ('/favorecido/list/:page?', FavorecidoController.list)
 routes.delete ('/favorecido', FavorecidoController.delete)
 routes.get ('/favorecido/:id', FavorecidoController.get)
+routes.get ('/favorecidos/:page?', FavorecidoController.list)
 
 
 module.exports = routes;
