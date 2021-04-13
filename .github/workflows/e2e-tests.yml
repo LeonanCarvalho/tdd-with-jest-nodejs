@@ -9,7 +9,8 @@ jobs:
   e2e-tests:
     name: Rodar testes E2E
     runs-on: ubuntu-latest
-
+    env:
+      NODE_ENV: 'test'
     steps:
       - name: Puxar o código do commit
         uses: actions/checkout@v2
@@ -20,14 +21,19 @@ jobs:
           node-version: '14.x'
 
       - name: Instalar Dependências
-        uses: borales/actions-yarn@v2.0.0
+        uses: CultureHQ/actions-yarn@master
         with:
-          cmd: install
+          args: install
 
       - name: Rodar testes
-      - uses: borales/actions-yarn@v2.0.0
+        uses: CultureHQ/actions-yarn@master
         with:
-          cmd: test
+          args: test
+
+      - name: Rodar testes
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: test
 
 #      - name: Archive code coverage results
 #        uses: actions/upload-artifact@v2

@@ -107,4 +107,4 @@ dist
 .idea
 
 # SQLite database
-dev.db
+*.db
