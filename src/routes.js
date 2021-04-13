@@ -1,16 +1,16 @@
-const {Router} = require('express')
-const routes = Router()
+const { Router } = require('express');
+const routes = Router();
 
-const FavorecidoController = require('./app/controllers/FavorecidoController')
+const FavorecidosController = require('./app/controllers/FavorecidosController');
 
 routes.get('/', ((req, res) => {
-    res.status(200).send('ok')
-}))
-routes.post('/favorecido', FavorecidoController.create)
-routes.put('/favorecido', FavorecidoController.update)
-routes.delete('/favorecido', FavorecidoController.delete)
-routes.get('/favorecido/:id', FavorecidoController.get)
-routes.get('/favorecidos/:page?', FavorecidoController.list)
-
+  res.status(200)
+    .send('ok');
+}));
+routes.post('/favorecido', FavorecidosController.create);
+routes.put('/favorecido', FavorecidosController.update);
+routes.delete('/favorecido', FavorecidosController.delete);
+routes.get('/favorecido/:id', FavorecidosController.get);
+routes.get('/favorecidos/:page?', FavorecidosController.list);
 
 module.exports = routes;
