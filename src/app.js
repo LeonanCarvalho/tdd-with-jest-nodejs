@@ -23,14 +23,6 @@ class AppController {
 
   routes() {
     this.express.use('/', require('./routes'));
-    this.express.all('*', (req, res) => {
-      res.status(404)
-        .json({
-          success: false,
-          message: 'route not defined',
-          data: null,
-        });
-    });
   }
 }
 

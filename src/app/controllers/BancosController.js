@@ -9,16 +9,6 @@ const { Bancos } = require('../data/bancos');
 
 class BancoController {
 
-  isValidAgency(agency) {
-    console.log(this.scheme.agency);
-    return true;
-  }
-
-  isValidAccount(account) {
-    console.log(this.scheme.agency);
-    return true;
-  }
-
   all(req, res, next) {
     res.locals.status = 200;
     res.locals.result = Bancos;
@@ -40,17 +30,17 @@ class BancoController {
     return next();
   }
 
-  async search(req, res, next) {
-    const verb = req.params.verb || null;
-    let result = [];
+   search(req, res, next) {
+     const verb = req.params.verb || null;
+     let result = [];
 
-    if (verb) {
-      result = [...new Set([
-        ...insensitiveFilter(Bancos, 'cod', verb),
-        ...insensitiveFilter(Bancos, 'name', verb)
-      ])
-      ];
-    } else {
+     if (verb) {
+       result = [...new Set([
+         ...insensitiveFilter(Bancos, 'cod', verb),
+         ...insensitiveFilter(Bancos, 'name', verb)
+       ])
+       ];
+     } else {
       result = Bancos;
     }
 
