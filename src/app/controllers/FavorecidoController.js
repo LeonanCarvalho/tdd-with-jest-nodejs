@@ -35,15 +35,18 @@ class FavorecidoController {
 
     async list(req, res) {
         const pageSize = 10;
-        let page = 0;
+        let offset = 0;
 
         if (req.params.page) {
-            page = parseInt(req.params.page);
+            offset = parseInt(req.params.page) - 1;
+            if(offset < 0){
+                offset = 0;
+            }
         }
 
         Favorecido.findAndCountAll(
             paginate({},
-                {page, pageSize}
+                {offset, pageSize}
             )
         )
             .then(async result => {
