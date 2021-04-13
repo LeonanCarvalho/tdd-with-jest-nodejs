@@ -4,16 +4,18 @@
  * @param DataTypes
  */
 module.exports = (sequilize, DataTypes) => {
-  const Favorecido = sequilize.define('Favorecido', {
+  return sequilize.define('Favorecido', {
     name: DataTypes.STRING,
     doc: DataTypes.STRING,
     email: DataTypes.STRING,
+    cod_banco: DataTypes.STRING,
+    agencia: DataTypes.STRING,
+    agencia_digito: DataTypes.STRING,
+    conta: DataTypes.STRING,
+    conta_digito: DataTypes.STRING,
+    status: {
+      type: DataTypes.ENUM('Rascunho', 'Validado'),
+      defaultValue: 'Rascunho'
+    }
   });
-
-  Favorecido.associate = function (models) {
-    //Relacionamento 1:N para Contas Bancárias
-    Favorecido.hasMany(models.BancoDoFavorecido, { as: 'favorecido_banco' });
-  };
-
-  return Favorecido;
 };

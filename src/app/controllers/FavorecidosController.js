@@ -2,24 +2,24 @@ const { Favorecido } = require('../models');
 const { paginate } = require('../utils/SequelizeUtils');
 
 class FavorecidosController {
-  async create(req, res) {
+  async create(req, res, next) {
 
     return res.status(200)
       .send();
   }
 
-  async update(req, res) {
+  async update(req, res, next) {
 
     return res.status(200)
       .send();
   }
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     return res.status(200)
       .send();
   }
 
-  async get(req, res) {
+  async get(req, res, next) {
     const id = parseInt(req.params.id);
     if (!id) {
       return res.status(400)
@@ -38,7 +38,7 @@ class FavorecidosController {
       });
   }
 
-  async list(req, res) {
+  async list(req, res, next) {
     const pageSize = 10;
     let offset = 0;
 
@@ -49,22 +49,23 @@ class FavorecidosController {
       }
     }
 
-    Favorecido.findAndCountAll(
-      paginate({},
-        {
-          offset,
-          pageSize
-        }
-      )
-    )
-      .then(async result => {
-        return res.status(200)
-          .send(result);
-      })
-      .catch(async err => {
-        return res.status(500)
-          .send(err);
-      });
+    try {
+      const result = await Favorecido.findAndCountAll(
+        paginate({},
+          {
+            offset,
+            pageSize
+          }
+        )
+      );
+      res.locals.status = 200;
+      res.locals.result = result;
+    } catch (err) {
+      res.locals.status = 500;
+      res.locals.message = err.message();
+    } finally {
+      return next();
+    }
 
   }
 }

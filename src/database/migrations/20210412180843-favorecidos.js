@@ -23,20 +23,32 @@ module.exports = {
         //unicode: true,
         allowNull: false
       },
+      cod_banco: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      agencia: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      agencia_digito: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      conta: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      conta_digito: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       status: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
+        type: Sequelize.ENUM('Rascunho', 'Validado'),
+        defaultValue: 'Rascunho',
         //unicode: true,
         allowNull: false
-      },
-      created_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      updated_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
+      }
     });
   },
 
