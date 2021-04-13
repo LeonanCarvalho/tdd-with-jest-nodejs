@@ -63,10 +63,9 @@ class FavorecidosController {
     } catch (err) {
       res.locals.status = 500;
       res.locals.message = err.message();
-    } finally {
-      return next();
     }
 
+    return next();
   }
 }
 
