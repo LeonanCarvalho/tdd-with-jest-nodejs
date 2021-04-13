@@ -4,8 +4,7 @@
  * @param DataTypes
  */
 
-const { promisify } = require('util');
-
+const { insensitiveFilter, strictFilter } = require('../utils/ArrayUtils');
 const { Bancos } = require('../data/bancos');
 
 class BancoController {
@@ -20,11 +19,26 @@ class BancoController {
     return true;
   }
 
-  filter(field, toSearch) {
-    return Bancos.filter(o => {
-      return o[field].includes(toSearch);
-    });
-  };
+  all(req, res, next) {
+    res.locals.status = 200;
+    res.locals.result = Bancos;
+    return next();
+  }
+
+  async get(req, res, next) {
+
+    const cod = req.params.cod || null;
+    let result = strictFilter(Bancos, 'cod', `${cod}`);
+
+    if (result.length == 0) {
+      res.locals.status = 404;
+    } else {
+      res.locals.status = 200;
+    }
+
+    res.locals.result = result[0];
+    return next();
+  }
 
   async search(req, res, next) {
     const verb = req.params.verb || null;
@@ -32,8 +46,8 @@ class BancoController {
 
     if (verb) {
       result = [...new Set([
-        ...filter('cod', verb),
-        ...filter('name', verb)
+        ...insensitiveFilter(Bancos, 'cod', verb),
+        ...insensitiveFilter(Bancos, 'name', verb)
       ])
       ];
     } else {

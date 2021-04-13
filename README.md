@@ -16,3 +16,15 @@
 ```
 yarn install
 ```
+
+
+## Dev
+
+```
+yarn dev
+```
+
+
+## Deploy
+https://github.com/LeonanCarvalho/tdd-with-jest-nodejs/deployments
+

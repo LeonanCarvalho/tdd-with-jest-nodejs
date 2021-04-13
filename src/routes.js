@@ -5,13 +5,15 @@ const responseSender = require('./app/middleware/responseSender');
 const FavorecidosController = require('./app/controllers/FavorecidosController');
 const BancosController = require('./app/controllers/BancosController');
 
-routes.get('/', ((req, res) => {
-  res.status(200)
-    .json({ message: 'ok' });
+routes.get('/', ((req, res, next) => {
+  res.locals.status = 200;
+  res.locals.message = 'ok';
+  return next();
 }));
 
 //Listagem de Favorecidos
 routes.post('/favorecidos/:page?', FavorecidosController.list);
+routes.get('/favorecidos/:page?', FavorecidosController.list);
 
 //Manutenção de favorecidos
 routes.get('/favorecido/:id', FavorecidosController.get);
@@ -20,7 +22,9 @@ routes.put('/favorecido', FavorecidosController.update);
 routes.delete('/favorecido', FavorecidosController.delete);
 
 //Bancos
-routes.get('/banco/:verb', BancosController.search);
+routes.get('/bancos/:verb?', BancosController.search);
+routes.get('/bancos', BancosController.all);
+routes.get('/banco/:cod', BancosController.get);
 
 routes.use(responseSender());
 
