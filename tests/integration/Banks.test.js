@@ -2,13 +2,13 @@ const faker = require('faker-br');
 const request = require('supertest');
 const app = require('./../../src/app');
 
-const { Bancos } = require('./../../src/app/data/bancos');
+const { Banks } = require('./../../src/app/data/banks');
 
-describe('Banco Integration', () => {
+describe('Bank Integration', () => {
   it('should search by Cod', async () => {
     const verb = '001';
     const response = await request(app)
-      .get(`/bancos/${verb}`)
+      .get(`/banks/${verb}`)
       .send();
 
     expect(response.status)
@@ -24,7 +24,7 @@ describe('Banco Integration', () => {
   it('should search by Name', async () => {
     const verb = 'Bradesco';
     const response = await request(app)
-      .get(`/bancos/${verb}`)
+      .get(`/banks/${verb}`)
       .send();
 
     expect(response.status)
@@ -39,7 +39,7 @@ describe('Banco Integration', () => {
 
   it('should search empty', async () => {
     const response = await request(app)
-      .get(`/bancos/`)
+      .get(`/banks/`)
       .send();
 
     expect(response.status)
@@ -54,22 +54,22 @@ describe('Banco Integration', () => {
       .toHaveProperty('name');
   });
 
-  it('should list all Bancos', async () => {
+  it('should list all Banks', async () => {
     const response = await request(app)
-      .get(`/bancos`)
+      .get(`/banks`)
       .send();
     expect(response.status)
       .toBe(200);
     expect(response.body)
       .toHaveProperty('data');
     expect(response.body.data.length)
-      .toBe(Bancos.length);
+      .toBe(Banks.length);
   });
 
-  it('should get Bancos by Cod', async () => {
+  it('should get Banks by Cod', async () => {
     const cod = '001';
     const response = await request(app)
-      .get(`/banco/${cod}`)
+      .get(`/bank/${cod}`)
       .send();
 
     expect(response.status)
@@ -80,19 +80,19 @@ describe('Banco Integration', () => {
       .toBe(cod);
   });
 
-  it('should not get Bancos by Cod', async () => {
+  it('should not get Banks by Cod', async () => {
     const cod = faker.lorem.slug;
     const response = await request(app)
-      .get(`/banco/${cod}`)
+      .get(`/bank/${cod}`)
       .send();
 
     expect(response.status)
       .toBe(404);
   });
 
-  it('should get All Bancos', async () => {
+  it('should get All Banks', async () => {
     const response = await request(app)
-      .get(`/bancos`)
+      .get(`/banks`)
       .send();
 
     expect(response.status)

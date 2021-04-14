@@ -50,10 +50,10 @@ const defaultScheme = {
   }
 };
 
-let Bancos = [
+let Banks = [
   {
     'cod': '001',
-    'name': 'Banco do Brasil'
+    'name': 'Bank do Brasil'
   },
   {
     'cod': '104',
@@ -70,15 +70,15 @@ let Bancos = [
 ];
 
 let i = 0,
-  len = Bancos.length;
+  len = Banks.length;
 while (i < len) {
-  let cod = Bancos[i].cod;
-  Bancos[i].scheme = Schemes[cod] || defaultScheme;
+  let cod = Banks[i].cod;
+  Banks[i].scheme = Schemes[cod] || defaultScheme;
   i++;
 }
 
 module.exports = {
-  Bancos: Bancos,
+  Banks: Banks,
   Schemes: Schemes,
   defaultScheme: defaultScheme,
 };

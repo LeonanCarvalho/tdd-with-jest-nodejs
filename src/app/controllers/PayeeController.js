@@ -1,8 +1,8 @@
 const { Op } = require('sequelize');
-const { Favorecido } = require('../models');
+const { Payee } = require('../models');
 const { paginate } = require('../utils/SequelizeUtils');
 
-class FavorecidosController {
+class PayeeController {
 
   validateId(paramId) {
     return paramId && !isNaN(paramId);
@@ -40,18 +40,18 @@ class FavorecidosController {
   async create(req, res, next) {
     let result;
 
-    const { favorecido } = req.body;
+    const { payee } = req.body;
     try {
-      if (!favorecido) {
-        this.emitError('Dados do favorecido inválidos');
+      if (!payee) {
+        this.emitError('Dados do payee inválidos');
       }
-      const storedFavorecido = await Favorecido.create(favorecido);
+      const storedPayee = await Payee.create(payee);
 
-      if (!storedFavorecido) {
-        this.emitError('Falha ao armazenar Favorecido');
+      if (!storedPayee) {
+        this.emitError('Falha ao armazenar Payee');
       }
 
-      result = { favorecido: storedFavorecido };
+      result = { payee: storedPayee };
       res.locals.status = 200;
     } catch (err) {
       const { status, message, errors } = this.handleErrors(err);
@@ -69,33 +69,33 @@ class FavorecidosController {
       const { id } = req.params;
 
       if (!id) {
-        this.emitError('O ID do Favorecido está incorreto');
+        this.emitError('O ID do Payee está incorreto');
       }
 
       if (!this.validateId(id)) {
-        this.emitError('O ID do Favorecido está inválido');
+        this.emitError('O ID do Payee está inválido');
       }
 
-      const { favorecido } = req.body;
+      const { payee } = req.body;
 
-      if (!favorecido) {
-        this.emitError('Dados do favorecido inválidos');
+      if (!payee) {
+        this.emitError('Dados do payee inválidos');
       }
 
       const condition = { where: { id: id } };
-      const storedFavorecido = await Favorecido.findOne(condition);
+      const storedPayee = await Payee.findOne(condition);
 
-      if (!storedFavorecido) {
-        this.emitError('Favorecido não encontrado');
+      if (!storedPayee) {
+        this.emitError('Payee não encontrado');
       }
 
-      const updatedFavorecido = await storedFavorecido.update(favorecido);
+      const updatedPayee = await storedPayee.update(payee);
 
-      if (!updatedFavorecido) {
-        this.emitError('Falha ao atualizar favorecido');
+      if (!updatedPayee) {
+        this.emitError('Falha ao atualizar payee');
       }
 
-      result = { favorecido: updatedFavorecido };
+      result = { payee: updatedPayee };
 
       res.locals.status = 200;
     } catch (err) {
@@ -112,19 +112,19 @@ class FavorecidosController {
     const { id } = req.params;
     try {
       if (!id) {
-        this.emitError('O ID do Favorecido está incorreto');
+        this.emitError('O ID do Payee está incorreto');
       }
 
       if (!this.validateId(id)) {
-        this.emitError('O ID do Favorecido está inválido');
+        this.emitError('O ID do Payee está inválido');
       }
       const condition = { where: { id: id } };
-      const deletedRecord = await Favorecido.destroy(condition);
+      const deletedRecord = await Payee.destroy(condition);
       if (deletedRecord === 1) {
         res.locals.status = 200;
-        res.locals.message = 'Favorecido Excluido com Sucesso';
+        res.locals.message = 'Payee Excluido com Sucesso';
       } else {
-        this.emitError('Favorecido não encontrado');
+        this.emitError('Payee não encontrado');
       }
     } catch (err) {
       const { status, message, errors } = this.handleErrors(err);
@@ -138,17 +138,17 @@ class FavorecidosController {
   async deleteMany(req, res, next) {
     let result = { 'deletedRecord': 0 };
     try {
-      const { favorecidos } = req.body;
+      const { payees } = req.body;
 
-      if (!favorecidos) {
-        this.emitError('Dados do favorecido inválidos');
+      if (!payees) {
+        this.emitError('Dados do payee inválidos');
       }
 
-      console.log(favorecidos);
+      console.log(payees);
 
       let self = this;
       console.log(self);
-      const sanitized = favorecidos
+      const sanitized = payees
         .filter((id) => {
           return self.validateId(id);
         })
@@ -161,7 +161,7 @@ class FavorecidosController {
       if (sanitized.length > 0) {
         let condition = { where: { id: {} } };
         condition.where.id[Op.in] = sanitized;
-        result.deletedRecord = await Favorecido.destroy(condition);
+        result.deletedRecord = await Payee.destroy(condition);
         res.locals.status = 200;
       } else {
         res.locals.status = 400;
@@ -184,16 +184,16 @@ class FavorecidosController {
     try {
       const { id } = req.params;
       if (!id) {
-        this.emitError('O ID do Favorecido está incorreto');
+        this.emitError('O ID do Payee está incorreto');
       }
 
       if (!this.validateId(id)) {
-        this.emitError('O ID do Favorecido está inválido');
+        this.emitError('O ID do Payee está inválido');
       }
 
-      const favorecido = await Favorecido.findOne({ where: { id: id } });
-      res.locals.status = (favorecido) ? 200 : 404;
-      result = { favorecido: favorecido };
+      const payee = await Payee.findOne({ where: { id: id } });
+      res.locals.status = (payee) ? 200 : 404;
+      result = { payee: payee };
     } catch (err) {
       const { status, message, errors } = this.handleErrors(err);
       res.locals.status = status;
@@ -207,7 +207,7 @@ class FavorecidosController {
   async list(req, res, next) {
     let result;
     const pageSize = 10;
-    const searchableFields = ['name', 'doc', 'agencia', 'conta'];
+    const searchableFields = ['name', 'doc', 'agency', 'account'];
 
     let page = 0;
 
@@ -234,7 +234,7 @@ class FavorecidosController {
     }
 
     try {
-      const favorecidos = await Favorecido.findAndCountAll(
+      const payees = await Payee.findAndCountAll(
         paginate(query,
           {
             page,
@@ -242,14 +242,14 @@ class FavorecidosController {
           }
         )
       );
-      res.locals.status = (favorecidos) ? 200 : 404;
-      const total = favorecidos.count || 0;
+      res.locals.status = (payees) ? 200 : 404;
+      const total = payees.count || 0;
       const totalPages = Math.ceil(total / pageSize);
       result = {
         ...{
           totalPages: totalPages,
           page: page + 1
-        }, ...favorecidos
+        }, ...payees
       };
     } catch (err) {
       const { status, message, errors } = this.handleErrors(err);
@@ -262,4 +262,4 @@ class FavorecidosController {
   }
 }
 
-module.exports = new FavorecidosController();
+module.exports = new PayeeController();

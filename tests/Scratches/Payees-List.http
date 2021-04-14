@@ -1,4 +1,4 @@
-POST http://localhost:3000/favorecidos/
+POST http://localhost:3000/payees/
 Content-Type: application/json
 
 {
