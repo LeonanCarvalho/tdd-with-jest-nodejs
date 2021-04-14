@@ -6,12 +6,13 @@ class FavorecidosController {
   validateId(paramId) {
     const id = parseInt(paramId);
     if (!id || isNaN(id)) {
-      return null;
+      return false;
     }
     return id;
   }
 
   async create(req, res, next) {
+
     res.locals.message = 'TODO';
     return next();
   }
@@ -27,7 +28,8 @@ class FavorecidosController {
       res.locals.status = 400;
       res.locals.message = 'O ID do Favorecido está incorreto';
     } else {
-      const deletedRecord = await Favorecido.destroy({ where: { id: id } });
+      const condition = { where: { id: id } };
+      const deletedRecord = await Favorecido.destroy(condition);
       if (deletedRecord === 1) {
         res.locals.status = 200;
         res.locals.message = 'Favorecido Excluido com Sucesso';
@@ -39,7 +41,25 @@ class FavorecidosController {
   }
 
   async deleteMany(req, res, next) {
-    res.locals.message = 'TODO';
+    let result = { 'deletedRecord': 0 };
+    if (req.body.favorecidos && req.body.favorecidos.length > 0) {
+
+      const sanitized = req.body.favorecidos.filter(id => {
+        return !!this.validateId(id);
+      })
+        .map(this.validateId);
+
+      if (sanitized.length > 0) {
+        let condition = { where: { id: {} } };
+        condition.where.id[Op.in] = sanitized;
+        result.deletedRecord = await Favorecido.destroy(condition);
+        res.locals.status = 200;
+      } else {
+        res.locals.status = 400;
+        result.deletedRecord = 0;
+      }
+    }
+    res.locals.result = result;
     return next();
   }
 

@@ -5,7 +5,17 @@ GET http://localhost:3000/favorecido/1
 POST http://localhost:3000/favorecido
 Content-Type: application/json
 
-{}
+{
+  "name": "Leonan Carvalho",
+  "doc": "00000000000",
+  "email": "j.leonancarvalho@gmail.com",
+  "cod_banco": "001",
+  "agencia": "01234",
+  "agencia_digito": "1",
+  "conta": "00012345",
+  "conta_digito": 1,
+  "status": "Rascunho"
+}
 
 ###
 
@@ -26,10 +36,13 @@ DELETE http://localhost:3000/favorecido
 Content-Type: application/json
 
 {
-  "records": [
+  "favorecidos": [
     1,
-    2,
-    3
+    "2",
+    3,
+    null,
+    "gatinhos",
+    5
   ]
 }
 

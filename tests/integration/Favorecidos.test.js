@@ -9,33 +9,64 @@ describe('Favorecido Integration', () => {
   afterEach(async () => {
     await truncate();
   });
+
   it('should create a CPF Favorecido with valid data', async () => {
-    const favorecido = await factory.create('FavorecidoPF', {});
+    const favorecido = {
+      name: faker.name.findName(),
+      doc: faker.br.cpf(),
+      email: faker.internet.email(),
+      cod_banco: faker.helpers.randomize(['001', '104', '756', '237']),
+      agencia: faker.finance.account(),
+      agencia_digito: 1,
+      conta: faker.finance.account(),
+      conta_digito: 1,
+      status: faker.helpers.randomize(['Rascunho', 'Validado'])
+    };
 
     const response = await request(app)
       .post('/favorecido')
-      .send({
-        name: favorecido.name,
-        doc: favorecido.doc,
-        email: favorecido.email,
-      });
+      .send(favorecido);
 
     expect(response.status)
       .toBe(200);
-    expect(favorecido)
+    expect(response.body)
       .toHaveProperty('id');
+    expect(response.body.name)
+      .toBe(favorecido.name);
+    expect(response.body.name)
+      .toBe(favorecido.name);
+    expect(response.body.name)
+      .toBe(favorecido.name);
+    expect(response.body.name)
+      .toBe(favorecido.name);
+    expect(response.body.name)
+      .toBe(favorecido.name);
+    expect(response.body.name)
+      .toBe(favorecido.name);
+    expect(response.body.name)
+      .toBe(favorecido.name);
+    expect(response.body.name)
+      .toBe(favorecido.name);
+    expect(response.body.name)
+      .toBe(favorecido.name);
   });
 
   it('should create a CNPJ Favorecido with valid data', async () => {
-    const favorecido = await factory.create('FavorecidoPJ', {});
+    const favorecido = {
+      name: faker.company.companyName(),
+      doc: faker.br.cnpj(),
+      email: faker.internet.email(),
+      cod_banco: faker.helpers.randomize(['001', '104', '756', '237']),
+      agencia: faker.finance.account(),
+      agencia_digito: 1,
+      conta: faker.finance.account(),
+      conta_digito: 1,
+      status: faker.helpers.randomize(['Rascunho', 'Validado'])
+    };
 
     const response = await request(app)
       .post('/favorecido')
-      .send({
-        name: favorecido.name,
-        doc: favorecido.doc,
-        email: favorecido.email,
-      });
+      .send(favorecido);
 
     expect(response.status)
       .toBe(200);
@@ -145,29 +176,8 @@ describe('Favorecido Integration', () => {
       .toBe(1);
 
   });
-  it('should get Favorecido pagination', async () => {
-    let i = 0;
-    let last;
-    while (i < 30) {
-      last = await factory.create('FavorecidoPJ', {});
-      i++;
-    }
 
-    console.log(last);
 
-    const response = await request(app)
-      .post('/favorecidos')
-      .send({
-        'search': '1'
-      });
-
-    expect(response.body.data)
-      .toHaveProperty('totalPages');
-    expect(response.body.data)
-      .toHaveProperty('count');
-    expect(response.body.data)
-      .toHaveProperty('rows');
-  });
   it('should update Favorecido', async () => {
     const favorecido = await factory.create('FavorecidoPJ', {});
 
@@ -203,6 +213,34 @@ describe('Favorecido Integration', () => {
       .toBe(200);
     expect(response.body.message)
       .toBe('Favorecido Excluido com Sucesso');
+  });
+
+  it('should delete Many Favorecido', async () => {
+
+    let i = 0;
+    let favorecidos = ['invalidID'];
+    while (i < 30) {
+      let favorecido = await factory.create('FavorecidoPJ', {});
+      favorecidos.push(favorecido.id);
+      i++;
+    }
+    const extraFavorecido = await factory.create('FavorecidoPF', {});
+    favorecidos.push(extraFavorecido.id.toString());
+
+    const totalToDelete = favorecidos.length - 1;
+    const payload = { 'favorecidos': favorecidos };
+    const response = await request(app)
+      .delete(`/favorecido`)
+      .send(payload);
+
+    expect(response.status)
+      .toBe(200);
+    expect(response.body.status)
+      .toBe(200);
+    expect(response.body)
+      .toHaveProperty('data');
+    expect(response.body.data.deletedRecord)
+      .toBe(totalToDelete);
   });
 
 });
