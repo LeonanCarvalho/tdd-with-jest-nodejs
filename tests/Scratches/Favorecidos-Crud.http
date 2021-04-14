@@ -1,0 +1,38 @@
+GET http://localhost:3000/favorecido/1
+
+###
+
+POST http://localhost:3000/favorecido
+Content-Type: application/json
+
+{}
+
+###
+
+
+PUT http://localhost:3000/favorecido
+Content-Type: application/json
+
+{
+  "id": 10,
+  "email": "j.leonancarvalho@gmail.com"
+}
+
+###
+DELETE http://localhost:3000/favorecido/27
+
+###
+DELETE http://localhost:3000/favorecido
+Content-Type: application/json
+
+{
+  "records": [
+    1,
+    2,
+    3
+  ]
+}
+
+###
+
+

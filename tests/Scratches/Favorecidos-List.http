@@ -1,0 +1,8 @@
+POST http://localhost:3000/favorecidos/
+Content-Type: application/json
+
+{
+  "search": "104"
+}
+
+###

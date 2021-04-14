@@ -11,25 +11,39 @@ routes.get('/', ((req, res, next) => {
   return next();
 }));
 
-routes.all('*', ((req, res, next) => {
-  res.locals.status = 404;
-  return next();
-}));
-
 //Listagem de Favorecidos
-routes.post('/favorecidos/:page?', FavorecidosController.list);
-routes.get('/favorecidos/:page?', FavorecidosController.list);
+routes.post('/favorecidos/:page?', (...args) =>
+  FavorecidosController.list(...args));
+routes.get('/favorecidos/:page?', (...args) =>
+  FavorecidosController.list(...args));
 
 //Manutenção de favorecidos
-routes.get('/favorecido/:id', FavorecidosController.get);
-routes.post('/favorecido', FavorecidosController.create);
-routes.put('/favorecido', FavorecidosController.update);
-routes.delete('/favorecido', FavorecidosController.delete);
+routes.get('/favorecido/:id', (...args) =>
+  FavorecidosController.get(...args));
+routes.post('/favorecido', (...args) =>
+  FavorecidosController.create(...args));
+routes.put('/favorecido', (...args) =>
+  FavorecidosController.update(...args));
+routes.delete('/favorecido/:id', (...args) =>
+  FavorecidosController.delete(...args));
+routes.delete('/favorecido', (...args) =>
+  FavorecidosController.deleteMany(...args));
 
 //Bancos
-routes.get('/bancos/:verb?', BancosController.search);
-routes.get('/bancos', BancosController.all);
-routes.get('/banco/:cod', BancosController.get);
+routes.get('/bancos/:verb?', (...args) =>
+  BancosController.search(...args));
+routes.get('/bancos', (...args) =>
+  BancosController.all(...args));
+routes.get('/banco/:cod', (...args) =>
+  BancosController.get(...args));
+
+routes.all('*', ((req, res, next) => {
+  if (!res.locals.status) {
+    res.locals.status = 404;
+  }
+
+  return next();
+}));
 
 routes.use(responseSender());
 
