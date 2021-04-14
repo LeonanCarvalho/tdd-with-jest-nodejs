@@ -2,6 +2,8 @@ const faker = require('faker-br');
 const request = require('supertest');
 const app = require('./../../src/app');
 
+const { Bancos } = require('./../../src/app/data/bancos');
+
 describe('Banco Integration', () => {
   it('should search by Cod', async () => {
     const verb = '001';
@@ -46,19 +48,22 @@ describe('Banco Integration', () => {
       .toHaveProperty('data');
     expect(response.body.data.length)
       .toBeGreaterThan(0);
+    expect(response.body.data[0])
+      .toHaveProperty('cod');
+    expect(response.body.data[0])
+      .toHaveProperty('name');
   });
 
-  it('should get all Bancos', async () => {
+  it('should list all Bancos', async () => {
     const response = await request(app)
       .get(`/bancos`)
       .send();
-
     expect(response.status)
       .toBe(200);
     expect(response.body)
       .toHaveProperty('data');
     expect(response.body.data.length)
-      .toBeGreaterThan(0);
+      .toBe(Bancos.length);
   });
 
   it('should get Bancos by Cod', async () => {
