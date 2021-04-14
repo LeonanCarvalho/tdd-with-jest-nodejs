@@ -1,49 +1,30 @@
-/**
- * Favorecido Model
- * @param sequilize
- * @param DataTypes
- */
-
-const { insensitiveFilter, strictFilter } = require('../utils/ArrayUtils');
-const { Bancos } = require('../data/bancos');
+const BancoService = require('../services/BancoService');
 
 class BancoController {
 
-  all(req, res, next) {
+  async all(req, res, next) {
     res.locals.status = 200;
-    res.locals.result = Bancos;
+    res.locals.result = await BancoService.all();
     return next();
   }
 
   async get(req, res, next) {
-
     const cod = req.params.cod || null;
-    let result = strictFilter(Bancos, 'cod', `${cod}`);
+    const result = await BancoService.get(cod);
 
-    if (result.length == 0) {
+    if (!result) {
       res.locals.status = 404;
     } else {
       res.locals.status = 200;
     }
 
-    res.locals.result = result[0];
+    res.locals.result = result;
     return next();
   }
 
-   search(req, res, next) {
-     const verb = req.params.verb || null;
-     let result = [];
-
-     if (verb) {
-       result = [...new Set([
-         ...insensitiveFilter(Bancos, 'cod', verb),
-         ...insensitiveFilter(Bancos, 'name', verb)
-       ])
-       ];
-     } else {
-      result = Bancos;
-    }
-
+  async search(req, res, next) {
+    const verb = req.params.verb || null;
+    const result = await BancoService.search(verb);
     res.locals.status = 200;
     res.locals.result = result;
     return next();

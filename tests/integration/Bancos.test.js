@@ -20,7 +20,7 @@ describe('Banco Integration', () => {
   });
 
   it('should search by Name', async () => {
-    const verb = 'Br';
+    const verb = 'Bradesco';
     const response = await request(app)
       .get(`/bancos/${verb}`)
       .send();
@@ -31,6 +31,8 @@ describe('Banco Integration', () => {
       .toHaveProperty('data');
     expect(response.body.data.length)
       .toBeGreaterThan(0);
+    expect(response.body.data[0].name)
+      .toBe(verb);
   });
 
   it('should search empty', async () => {
