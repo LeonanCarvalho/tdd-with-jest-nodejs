@@ -20,6 +20,7 @@
     "express": "^4.17.1",
     "faker-br": "^0.4.1",
     "helmet": "^4.4.1",
+    "jest-each": "^26.6.2",
     "json-schema-faker": "^0.5.0-rcv.34",
     "sequelize": "^6.6.2",
     "sqlite3": "^5.0.2",

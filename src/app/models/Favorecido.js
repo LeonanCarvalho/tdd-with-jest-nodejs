@@ -1,6 +1,6 @@
 const { cpf, cnpj } = require('cpf-cnpj-validator');
-
 const { symmetricDiff } = require('../utils/ArrayUtils');
+const BancoService = require('../services/BancoService');
 
 /**
  * Favorecido Model
@@ -9,11 +9,19 @@ const { symmetricDiff } = require('../utils/ArrayUtils');
  */
 module.exports = (sequilize, DataTypes) => {
 
-  function isValidBank(cod_banco) {
-
+  async function isValidBank(cod_banco) {
+    const cod = await BancoService.get(cod_banco);
+    if (!cod) {
+      throw new Error('Forneça um Código de Banco válido');
+    }
   }
 
   function isValidAgencia(agencia) {
+    const { _changed, cod_banco } = this;
+    const hasChanged = _changed.has('agencia');
+    if (hasChanged) {
+      BancoService.validateAgencia(cod_banco, agencia);
+    }
 
   }
 
@@ -36,9 +44,6 @@ module.exports = (sequilize, DataTypes) => {
     }
   };
 
-  function allowedToEdit(value) {
-    console.log(value, this);
-  }
 
   const Favorecido = sequilize.define('Favorecido', {
     name: {
@@ -66,21 +71,33 @@ module.exports = (sequilize, DataTypes) => {
     cod_banco: {
       type: DataTypes.STRING,
       validate: {
-        isValidBank
+        isValidBank: isValidBank
       }
 
     },
     agencia: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        isValidAgencia: isValidAgencia
+      }
     },
     agencia_digito: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        isValidAgenciaDigito: isValidAgenciaDigito
+      }
     },
     conta: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        isValidConta: isValidConta
+      }
     },
     conta_digito: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        isValidContaDigito: isValidContaDigito
+      }
     },
     status: {
       type: DataTypes.ENUM('Rascunho', 'Validado'),

@@ -2,7 +2,7 @@ POST http://localhost:3000/favorecidos/
 Content-Type: application/json
 
 {
-  "search": "104"
+  "search": "47206027032"
 }
 
 ###

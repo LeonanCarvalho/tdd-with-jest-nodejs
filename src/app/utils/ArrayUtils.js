@@ -28,8 +28,15 @@ const symmetricDiff = (arr1, arr2) => {
     .concat(arr2.filter(x => !arr1.includes(x)));
 };
 
+const getRandomValue = (arr, field) => {
+  const random = Math.floor(Math.random() * arr.length);
+  const value = arr[random];
+  return value[field];
+};
+
 module.exports = {
   insensitiveFilter: insensitiveFilter,
   strictFilter: strictFilter,
-  symmetricDiff: symmetricDiff
+  symmetricDiff: symmetricDiff,
+  getRandomValue: getRandomValue,
 };

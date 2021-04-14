@@ -34,6 +34,9 @@ class BancoService {
     return result;
   }
 
+  async validateAgencia(cod, ageencia) {
+    
+  }
 }
 
 module.exports = new BancoService();

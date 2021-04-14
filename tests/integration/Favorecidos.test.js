@@ -1,9 +1,11 @@
 const request = require('supertest');
 const faker = require('faker-br');
+const each = request('jest-each');
 
 const app = require('./../../src/app');
 const truncate = require('../utils/truncate');
 const FavorecidoFactory = require('../factories/FavorecidoFactory');
+const { getRandomValue, strictFilter } = require('../../src/app/utils/ArrayUtils');
 
 describe('Favorecido Integration', () => {
   afterEach(async () => {
@@ -112,83 +114,82 @@ describe('Favorecido Integration', () => {
       .toBe(favorecido.id);
   });
 
-  it('should get Favorecido list paginated', async () => {
-    const pageSize = 10;
-    const seedNumber = 31;
-    expect(seedNumber)
-      .toBeGreaterThan(pageSize);
-    const expectedPages = Math.ceil(seedNumber / pageSize);
-    let i = 0;
-    while (i < seedNumber) {
-      await FavorecidoFactory.create('FavorecidoPJ', {});
-      i++;
+  it.each`
+     page  | expectedResult
+     ${1}  | ${10}
+     ${2}  | ${10}
+     ${3}  | ${1}
+     ${4}  | ${0}
+     // add new test cases here
+   `('Paginate Favorecidos to $page',
+    async ({ page, expectedResult }) => {
+      const pageSize = 10;
+      const seedNumber = 21;
+      expect(seedNumber)
+        .toBeGreaterThan(pageSize);
+      const expectedPages = Math.ceil(seedNumber / pageSize);
+      let i = 0;
+      while (i < seedNumber) {
+        await FavorecidoFactory.create('FavorecidoPJ', {});
+        i++;
+      }
+      const url = (page === 1) ? '/favorecidos' : `/favorecidos/${page}`;
+      const response = await request(app)
+        .get(url)
+        .send();
+
+      expect(response.body.data)
+        .toHaveProperty('totalPages');
+      expect(response.body.data.totalPages)
+        .toBe(expectedPages);
+      expect(response.body.data)
+        .toHaveProperty('page');
+      expect(response.body.data.page)
+        .toBe(page);
+      expect(response.body.data)
+        .toHaveProperty('count');
+      expect(response.body.data.count)
+        .toBe(seedNumber);
+      expect(response.body.data)
+        .toHaveProperty('rows');
+      expect(response.body.data.rows.length)
+        .toBe(expectedResult);
     }
+  );
 
-    const response = await request(app)
-      .get('/favorecidos')
-      .send();
+  it.each`
+     field
+     ${'name'}
+     ${'doc'}
+     ${'agencia'}
+     ${'conta'}
+     // add new test cases here
+   `('should get Favorecido auto complete by $field',
+    async ({ field }) => {
+      let i = 0;
+      let favorecidos = [];
+      while (i < 3) {
+        favorecidos.push(await FavorecidoFactory.create('FavorecidoPJ', {}));
+        i++;
+      }
 
-    expect(response.body.data)
-      .toHaveProperty('totalPages');
-    expect(response.body.data.totalPages)
-      .toBe(expectedPages);
-    expect(response.body.data)
-      .toHaveProperty('page');
-    expect(response.body.data.page)
-      .toBe(1);
-    expect(response.body.data)
-      .toHaveProperty('count');
-    expect(response.body.data.count)
-      .toBe(seedNumber);
-    expect(response.body.data)
-      .toHaveProperty('rows');
+      const fieldValue = getRandomValue(favorecidos, field);
 
-    expect(response.body.data.rows.length)
-      .toBe(pageSize);
+      const response = await request(app)
+        .post('/favorecidos')
+        .send({
+          'search': fieldValue
+        });
 
-    const response2 = await request(app)
-      .get('/favorecidos/2')
-      .send();
+      const result = strictFilter(response.body.data.rows, field, fieldValue);
 
-    expect(response2.body.data)
-      .toHaveProperty('totalPages');
-    expect(response2.body.data.totalPages)
-      .toBe(expectedPages);
-    expect(response2.body.data)
-      .toHaveProperty('page');
-    expect(response2.body.data.page)
-      .toBe(2);
-    expect(response2.body.data)
-      .toHaveProperty('count');
-    expect(response2.body.data)
-      .toHaveProperty('rows');
-    expect(response2.body.data.count)
-      .toBe(seedNumber);
-    expect(response2.body.data.rows.length)
-      .toBe(pageSize);
+      expect(response.body.data.rows.length)
+        .toBeGreaterThan(0);
+      expect(result[0][field])
+        .toBe(fieldValue);
+    }
+  );
 
-    const response4 = await request(app)
-      .get('/favorecidos/4')
-      .send();
-
-    expect(response4.body.data)
-      .toHaveProperty('totalPages');
-    expect(response4.body.data.totalPages)
-      .toBe(expectedPages);
-    expect(response4.body.data)
-      .toHaveProperty('page');
-    expect(response4.body.data.page)
-      .toBe(4);
-    expect(response4.body.data)
-      .toHaveProperty('count');
-    expect(response4.body.data)
-      .toHaveProperty('rows');
-    expect(response4.body.data.count)
-      .toBe(seedNumber);
-    expect(response4.body.data.rows.length)
-      .toBe(1);
-
-  });
 
   it('should get Favorecido data by Nome', async () => {
     const favorecido = await FavorecidoFactory.create('FavorecidoPJ', {});
