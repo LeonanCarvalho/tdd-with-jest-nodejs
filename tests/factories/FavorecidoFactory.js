@@ -1,7 +1,6 @@
-const faker = require('faker-br')
-const {factory} = require('factory-girl')
-const {Favorecido} = require('./../src/app/models')
-
+const faker = require('faker-br');
+const { factory } = require('factory-girl');
+const { Favorecido } = require('../../src/app/models');
 
 factory.define('FavorecidoPF', Favorecido, {
     name: faker.name.findName(),

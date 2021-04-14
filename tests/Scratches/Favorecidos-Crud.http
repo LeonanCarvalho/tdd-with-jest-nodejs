@@ -1,4 +1,4 @@
-GET http://localhost:3000/favorecido/1
+GET http://localhost:3000/favorecido/33
 
 ###
 
@@ -6,30 +6,34 @@ POST http://localhost:3000/favorecido
 Content-Type: application/json
 
 {
-  "name": "Leonan Carvalho",
-  "doc": "00000000000",
-  "email": "j.leonancarvalho@gmail.com",
-  "cod_banco": "001",
-  "agencia": "01234",
-  "agencia_digito": "1",
-  "conta": "00012345",
-  "conta_digito": 1,
-  "status": "Rascunho"
+  "favorecido": {
+    "name": "Jhon Conor",
+    "doc": "47206027032",
+    "email": "jhon.conor@gmail.com",
+    "cod_banco": "001",
+    "agencia": "01234",
+    "agencia_digito": "1",
+    "conta": "00012345",
+    "conta_digito": 1,
+    "status": "Rascunho"
+  }
 }
 
 ###
 
 
-PUT http://localhost:3000/favorecido
+PUT http://localhost:3000/favorecido/39
 Content-Type: application/json
 
 {
-  "id": 10,
-  "email": "j.leonancarvalho@gmail.com"
+  "favorecido": {
+    "email": "jhon.conor2@gmail.com",
+    "cod_banco": "001"
+  }
 }
 
 ###
-DELETE http://localhost:3000/favorecido/27
+DELETE http://localhost:3000/favorecido/35
 
 ###
 DELETE http://localhost:3000/favorecido
@@ -42,7 +46,8 @@ Content-Type: application/json
     3,
     null,
     "gatinhos",
-    5
+    5,
+    33
   ]
 }
 

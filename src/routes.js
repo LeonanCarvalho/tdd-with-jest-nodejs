@@ -22,7 +22,7 @@ routes.get('/favorecido/:id', (...args) =>
   FavorecidosController.get(...args));
 routes.post('/favorecido', (...args) =>
   FavorecidosController.create(...args));
-routes.put('/favorecido', (...args) =>
+routes.put('/favorecido/:id', (...args) =>
   FavorecidosController.update(...args));
 routes.delete('/favorecido/:id', (...args) =>
   FavorecidosController.delete(...args));

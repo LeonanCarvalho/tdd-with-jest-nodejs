@@ -3,7 +3,7 @@ const faker = require('faker-br');
 
 const app = require('./../../src/app');
 const truncate = require('../utils/truncate');
-const factory = require('../factories');
+const FavorecidoFactory = require('../factories/FavorecidoFactory');
 
 describe('Favorecido Integration', () => {
   afterEach(async () => {
@@ -23,32 +23,33 @@ describe('Favorecido Integration', () => {
       status: faker.helpers.randomize(['Rascunho', 'Validado'])
     };
 
+    const payload = { 'favorecido': favorecido };
     const response = await request(app)
       .post('/favorecido')
-      .send(favorecido);
+      .send(payload);
 
     expect(response.status)
       .toBe(200);
-    expect(response.body)
+    expect(response.body.data.favorecido)
       .toHaveProperty('id');
-    expect(response.body.name)
+    expect(response.body.data.favorecido.name)
       .toBe(favorecido.name);
-    expect(response.body.name)
-      .toBe(favorecido.name);
-    expect(response.body.name)
-      .toBe(favorecido.name);
-    expect(response.body.name)
-      .toBe(favorecido.name);
-    expect(response.body.name)
-      .toBe(favorecido.name);
-    expect(response.body.name)
-      .toBe(favorecido.name);
-    expect(response.body.name)
-      .toBe(favorecido.name);
-    expect(response.body.name)
-      .toBe(favorecido.name);
-    expect(response.body.name)
-      .toBe(favorecido.name);
+    expect(response.body.data.favorecido.doc)
+      .toBe(favorecido.doc);
+    expect(response.body.data.favorecido.email)
+      .toBe(favorecido.email);
+    expect(response.body.data.favorecido.cod_banco)
+      .toBe(favorecido.cod_banco);
+    expect(response.body.data.favorecido.agencia)
+      .toBe(favorecido.agencia);
+    expect(response.body.data.favorecido.agencia_digito)
+      .toBe(favorecido.agencia_digito);
+    expect(response.body.data.favorecido.conta)
+      .toBe(favorecido.conta);
+    expect(response.body.data.favorecido.conta_digito)
+      .toBe(favorecido.conta_digito);
+    expect(response.body.data.favorecido.status)
+      .toBe(favorecido.status);
   });
 
   it('should create a CNPJ Favorecido with valid data', async () => {
@@ -64,18 +65,37 @@ describe('Favorecido Integration', () => {
       status: faker.helpers.randomize(['Rascunho', 'Validado'])
     };
 
+    const payload = { 'favorecido': favorecido };
     const response = await request(app)
       .post('/favorecido')
-      .send(favorecido);
+      .send(payload);
 
     expect(response.status)
       .toBe(200);
-    expect(favorecido)
+    expect(response.body.data.favorecido)
       .toHaveProperty('id');
+    expect(response.body.data.favorecido.name)
+      .toBe(favorecido.name);
+    expect(response.body.data.favorecido.doc)
+      .toBe(favorecido.doc);
+    expect(response.body.data.favorecido.email)
+      .toBe(favorecido.email);
+    expect(response.body.data.favorecido.cod_banco)
+      .toBe(favorecido.cod_banco);
+    expect(response.body.data.favorecido.agencia)
+      .toBe(favorecido.agencia);
+    expect(response.body.data.favorecido.agencia_digito)
+      .toBe(favorecido.agencia_digito);
+    expect(response.body.data.favorecido.conta)
+      .toBe(favorecido.conta);
+    expect(response.body.data.favorecido.conta_digito)
+      .toBe(favorecido.conta_digito);
+    expect(response.body.data.favorecido.status)
+      .toBe(favorecido.status);
   });
 
   it('should get Favorecido data', async () => {
-    const favorecido = await factory.create('FavorecidoPJ', {});
+    const favorecido = await FavorecidoFactory.create('FavorecidoPJ', {});
 
     expect(favorecido)
       .toHaveProperty('id');
@@ -86,19 +106,12 @@ describe('Favorecido Integration', () => {
 
     expect(response.status)
       .toBe(200);
-    expect(response.body)
-      .toHaveProperty('data');
     expect(response.body.data)
-      .toHaveProperty('id');
-    expect(response.body.data)
-      .toHaveProperty('email');
-    expect(response.body.data)
-      .toHaveProperty('name');
-    expect(response.body.data)
-      .toHaveProperty('doc');
-    expect(response.body.data.id)
+      .toHaveProperty('favorecido');
+    expect(response.body.data.favorecido.id)
       .toBe(favorecido.id);
   });
+
   it('should get Favorecido list paginated', async () => {
     const pageSize = 10;
     const seedNumber = 31;
@@ -107,7 +120,7 @@ describe('Favorecido Integration', () => {
     const expectedPages = Math.ceil(seedNumber / pageSize);
     let i = 0;
     while (i < seedNumber) {
-      await factory.create('FavorecidoPJ', {});
+      await FavorecidoFactory.create('FavorecidoPJ', {});
       i++;
     }
 
@@ -177,28 +190,92 @@ describe('Favorecido Integration', () => {
 
   });
 
+  it('should get Favorecido data by Nome', async () => {
+    const favorecido = await FavorecidoFactory.create('FavorecidoPJ', {});
 
-  it('should update Favorecido', async () => {
-    const favorecido = await factory.create('FavorecidoPJ', {});
-
-    const email = faker.internet.email();
     expect(favorecido)
       .toHaveProperty('id');
 
     const response = await request(app)
-      .put('/favorecido')
-      .send({
-        id: favorecido.id,
-        email: email
-      });
+      .get(`/favorecido/${favorecido.id}`)
+      .send();
 
     expect(response.status)
       .toBe(200);
-    expect(favorecido.email)
-      .toBe(email);
+    expect(response.body.data)
+      .toHaveProperty('favorecido');
+    expect(response.body.data.favorecido)
+      .toHaveProperty('id');
+    expect(response.body.data.favorecido)
+      .toHaveProperty('email');
+    expect(response.body.data.favorecido)
+      .toHaveProperty('name');
+    expect(response.body.data.favorecido)
+      .toHaveProperty('doc');
+    expect(response.body.data.favorecido.id)
+      .toBe(favorecido.id);
   });
+
+  it('should update Favorecido', async () => {
+    const favorecido = await FavorecidoFactory.create('FavorecidoPJ', {
+      'status': 'Rascunho'
+    });
+
+    expect(favorecido)
+      .toHaveProperty('id');
+
+    expect(favorecido.status)
+      .toBe('Rascunho');
+
+    const payload = {
+      'favorecido': {
+        doc: favorecido.doc,
+        email: faker.internet.email(),
+        name: faker.name.findName()
+      }
+    };
+    const response = await request(app)
+      .put(`/favorecido/${favorecido.id}`)
+      .send(payload);
+
+    expect(response.status)
+      .toBe(200);
+
+    expect(response.body.data.favorecido.email)
+      .toBe(payload.favorecido.email);
+    expect(response.body.data.favorecido.name)
+      .toBe(payload.favorecido.name);
+  });
+
+  it('should update only email if status VALIDADO', async () => {
+    const favorecido = await FavorecidoFactory.create('FavorecidoPJ', {
+      'status': 'Validado'
+    });
+
+    expect(favorecido)
+      .toHaveProperty('id');
+
+    const payload = {
+      'favorecido': {
+        status: favorecido.status,
+        email: faker.internet.email(),
+        name: faker.name.findName()
+      }
+    };
+
+    const response = await request(app)
+      .put(`/favorecido/${favorecido.id}`)
+      .send(payload);
+
+    expect(response.status)
+      .toBe(400);
+
+    expect(response.body.message)
+      .toBe('O Favorecido já foi validado, apenas o e-mail pode ser alterado.');
+  });
+
   it('should delete Favorecido', async () => {
-    const favorecido = await factory.create('FavorecidoPF', {});
+    const favorecido = await FavorecidoFactory.create('FavorecidoPF', {});
 
     expect(favorecido)
       .toHaveProperty('id');
@@ -220,11 +297,11 @@ describe('Favorecido Integration', () => {
     let i = 0;
     let favorecidos = ['invalidID'];
     while (i < 30) {
-      let favorecido = await factory.create('FavorecidoPJ', {});
+      let favorecido = await FavorecidoFactory.create('FavorecidoPJ', {});
       favorecidos.push(favorecido.id);
       i++;
     }
-    const extraFavorecido = await factory.create('FavorecidoPF', {});
+    const extraFavorecido = await FavorecidoFactory.create('FavorecidoPF', {});
     favorecidos.push(extraFavorecido.id.toString());
 
     const totalToDelete = favorecidos.length - 1;
@@ -234,8 +311,6 @@ describe('Favorecido Integration', () => {
       .send(payload);
 
     expect(response.status)
-      .toBe(200);
-    expect(response.body.status)
       .toBe(200);
     expect(response.body)
       .toHaveProperty('data');
