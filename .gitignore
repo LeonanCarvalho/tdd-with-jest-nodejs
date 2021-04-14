@@ -107,6 +107,6 @@ dist
 .idea
 
 # SQLite database
-*.db
+*.sqlite
 
 .vercel

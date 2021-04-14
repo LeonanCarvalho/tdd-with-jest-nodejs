@@ -9,7 +9,7 @@ module.exports = {
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   dialect: process.env.DB_DIALECT || 'sqlite',
-  storage: process.env.NODE_ENV === 'test' ? './tests/data.db' : './dev.db',
+  storage: process.env.NODE_ENV === 'test' ? './tests/data.sqlite' : './dev.sqlite',
   logging: false,
   define: {
     timestamp: false,
