@@ -30,11 +30,6 @@ jobs:
         with:
           args: test
 
-      - name: Rodar testes
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: test
-
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
