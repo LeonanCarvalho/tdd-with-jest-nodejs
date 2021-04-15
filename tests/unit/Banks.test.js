@@ -107,7 +107,7 @@ describe('Bank Service', () => {
   });
 
   it('should get Banks by Cod', async () => {
-    const cod = '001';
+    const cod = faker.helpers.randomize(['001', '104', '756', '237']);
     const result = await BankService.get(cod);
     expect(result)
       .toHaveProperty('cod');
@@ -124,13 +124,12 @@ describe('Bank Service', () => {
       .toThrow(Error);
   });
 
-  it('should throw error for invalid Banks', async () => {
-    const cod = faker.lorem.slug;
+  it('should send Truthy to valid Bank', async () => {
+    const cod = faker.helpers.randomize(['001', '104', '756', '237']);
     await expect(async () => {
       return BankService.get(cod);
     })
-      .rejects
-      .toThrow(Error);
+      .toBeTruthy();
   });
 
 });
