@@ -1,6 +1,6 @@
 'use strict';
 
-const tableName = 'favorecidos';
+const tableName = 'payees';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.createTable(tableName, {
@@ -23,23 +23,27 @@ module.exports = {
         //unicode: true,
         allowNull: false
       },
-      cod_banco: {
+      cod_bank: {
         type: Sequelize.STRING,
         allowNull: true
       },
-      agencia: {
+      agency: {
         type: Sequelize.STRING,
         allowNull: true
       },
-      agencia_digito: {
+      agency_digit: {
         type: Sequelize.STRING,
         allowNull: true
       },
-      conta: {
+      account: {
         type: Sequelize.STRING,
         allowNull: true
       },
-      conta_digito: {
+      account_digit: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      account_type: {
         type: Sequelize.STRING,
         allowNull: true
       },

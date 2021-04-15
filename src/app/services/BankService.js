@@ -4,8 +4,10 @@
  * @param DataTypes
  */
 
+const jp = require('jsonpath');
 const { insensitiveFilter, strictFilter } = require('../utils/ArrayUtils');
 const { Banks } = require('../data/banks');
+const { Validator } = require('jsonschema');
 
 class BankService {
 
@@ -15,14 +17,14 @@ class BankService {
 
   async get(cod) {
     let bank = strictFilter(Banks, 'cod', `${cod}`);
-    if (!bank || bank.length == 0) {
+    if (!bank || bank.length === 0) {
       throw new Error('The bank cod provided is invalid');
     }
     return bank[0];
   }
 
   async search(verb) {
-    let result = [];
+    let result;
 
     if (verb) {
       result = [...new Set([
@@ -37,33 +39,63 @@ class BankService {
     return result;
   }
 
-  async validateAgency(cod, agency) {
+  async getScheme(cod, path) {
     const bank = await this.get(cod);
-    if (!bank) {
-      throw new TypeError('The bank cod provided is invalid');
-    }
+    const { scheme } = bank;
+    let result = jp.query(scheme, path)[0] || {};
+
+    delete result.digit;
+    return result;
   }
 
-  async validateAgencyDigit(cod, agency_digit) {
-    const bank = await this.get(cod);
-    if (!bank) {
-      throw new TypeError('The bank cod provided is invalid');
+  validateScheme(value, scheme) {
+    const v = new Validator();
+    const validation = v.validate(value, scheme);
+
+    if (validation.errors && validation.errors.length > 0) {
+      let msg = '';
+
+      for (let i in validation.errors) {
+        let error = validation.errors[i];
+        msg += error.message + '\n';
+      }
+
+      throw new Error(`Validation error for ${value}: \n ${msg}`);
+
     }
+
+    return true;
+
   }
 
-  async validateAccount(cod, account) {
-    const bank = await this.get(cod);
-    if (!bank) {
-      throw new TypeError('The bank cod provided is invalid');
-    }
+  async validateAgency(cod, agencyValue) {
+    const scheme = await this.getScheme(cod, '$.agency');
+    return this.validateScheme(agencyValue, scheme);
   }
 
-  async validateAccountDigit(cod, account_digit) {
-    const bank = await this.get(cod);
-    if (!bank) {
-      throw new TypeError('The bank cod provided is invalid');
-    }
+  async validateAgencyDigit(cod, agencyDigitValue) {
+    const scheme = await this.getScheme(cod, '$.agency.digit');
+    return this.validateScheme(agencyDigitValue, scheme);
   }
+
+  async validateAccount(cod, accountValue) {
+    const scheme = await this.getScheme(cod, '$.account');
+    return this.validateScheme(accountValue, scheme);
+  }
+
+  async validateAccountDigit(cod, accountDigit) {
+    const scheme = await this.getScheme(cod, '$.account.digit');
+    return this.validateScheme(accountDigit, scheme);
+  }
+
+  async validateAccountType(cod, account_type) {
+    const bank = await this.get(cod);
+
+    const { scheme } = bank;
+
+    return scheme.accountType.allowedTypes.indexOf(account_type) !== -1;
+  }
+
 }
 
 module.exports = new BankService();

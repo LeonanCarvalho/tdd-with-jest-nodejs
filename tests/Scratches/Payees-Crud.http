@@ -1,0 +1,56 @@
+GET http://localhost:3000/payee/33
+
+###
+
+POST http://localhost:3000/payee
+Content-Type: application/json
+
+{
+  "payee": {
+    "name": "Jhon Conor",
+    "doc": "47206027032",
+    "email": "jhon.conor@gmail.com",
+    "cod_bank": "001",
+    "agency": "01234",
+    "agency_digit": "1",
+    "account": "00012345",
+    "account_digit": 1,
+    "status": "Rascunho"
+  }
+}
+
+###
+
+
+PUT http://localhost:3000/payee/39
+Content-Type: application/json
+
+{
+  "payee": {
+    "email": "jhon.conor2@gmail.com",
+    "cod_bank": "001"
+  }
+}
+
+###
+DELETE http://localhost:3000/payee/35
+
+###
+DELETE http://localhost:3000/payee
+Content-Type: application/json
+
+{
+  "payees": [
+    1,
+    "2",
+    3,
+    null,
+    "gatinhos",
+    5,
+    33
+  ]
+}
+
+###
+
+

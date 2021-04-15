@@ -13,7 +13,6 @@ class PayeeController {
     if (this.validateId(id)) {
       return id;
     }
-    return null;
   }
 
   emitError(msg) {
@@ -43,12 +42,12 @@ class PayeeController {
     const { payee } = req.body;
     try {
       if (!payee) {
-        this.emitError('Dados do payee inválidos');
+        this.emitError('The Payee data is invalid');
       }
       const storedPayee = await Payee.create(payee);
 
       if (!storedPayee) {
-        this.emitError('Falha ao armazenar Payee');
+        this.emitError('Error to save Payee data');
       }
 
       result = { payee: storedPayee };
@@ -79,7 +78,7 @@ class PayeeController {
       const { payee } = req.body;
 
       if (!payee) {
-        this.emitError('Dados do payee inválidos');
+        this.emitError('The Payee data is invalid');
       }
 
       const condition = { where: { id: id } };
@@ -141,7 +140,7 @@ class PayeeController {
       const { payees } = req.body;
 
       if (!payees) {
-        this.emitError('Dados do payee inválidos');
+        this.emitError('The Payee data is invalid');
       }
 
       console.log(payees);

@@ -1,5 +1,45 @@
 const faker = require('faker-br');
+require('jest-each');
 const BankService = require('../../src/app/services/BankService');
+
+const BankFactory = require('../factories/BankFactory');
+
+describe('Bank Factory', () => {
+  it.each`
+     cod
+     ${'001'}
+     ${'104'}
+     ${'756'}
+     ${'237'}
+     // add new test cases here
+   `('should Generate Valid Bank code $cod',
+    async ({ cod }) => {
+      const bank = new BankFactory(cod);
+
+      const agency = bank.agency();
+      const agencyDigit = bank.agencyDigit();
+      const account = bank.account();
+      const accountDigit = bank.accountDigit();
+      const accountType = bank.accountType();
+
+      await expect(BankService.validateAgency(cod, agency))
+        .resolves
+        .toBeTruthy();
+      await expect(BankService.validateAgencyDigit(cod, agencyDigit))
+        .resolves
+        .toBeTruthy();
+      await expect(BankService.validateAccount(cod, account))
+        .resolves
+        .toBeTruthy();
+      await expect(BankService.validateAccountDigit(cod, accountDigit))
+        .resolves
+        .toBeTruthy();
+      await expect(BankService.validateAccountType(cod, accountType))
+        .resolves
+        .toBeTruthy();
+
+    });
+});
 
 describe('Bank Service', () => {
   it('should search by Cod', async () => {
@@ -45,7 +85,7 @@ describe('Bank Service', () => {
   it('should throw error for invalid Banks', async () => {
     const cod = faker.lorem.slug;
     await expect(async () => {
-      let bank = await BankService.get(cod);
+      return await BankService.get(cod);
     })
       .rejects
       .toThrow(Error);

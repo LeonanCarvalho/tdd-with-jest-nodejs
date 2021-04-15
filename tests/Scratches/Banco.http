@@ -1,9 +1,0 @@
-GET http://localhost:3000/bancos/Banco%20do%20Brasil
-
-###
-GET http://localhost:3000/banco/001
-
-###
-GET http://localhost:3000/bancos
-
-###
