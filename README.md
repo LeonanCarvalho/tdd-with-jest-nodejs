@@ -11,7 +11,7 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=LeonanCarvalho_tdd-with-jest-nodejs&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=LeonanCarvalho_tdd-with-jest-nodejs)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=LeonanCarvalho_tdd-with-jest-nodejs&metric=security_rating)](https://sonarcloud.io/dashboard?id=LeonanCarvalho_tdd-with-jest-nodejs)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=LeonanCarvalho_tdd-with-jest-nodejs&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=LeonanCarvalho_tdd-with-jest-nodejs)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LeonanCarvalho_tdd-with-jest-nodejs&metric=coverage)](https://sonarcloud.io/dashboard?id=LeonanCarvalho_tdd-with-jest-nodejs)
+[![codecov](https://codecov.io/gh/LeonanCarvalho/tdd-with-jest-nodejs/branch/main/graph/badge.svg?token=LIY6BBY33A)](https://codecov.io/gh/LeonanCarvalho/tdd-with-jest-nodejs)
 ## Instalacão:
 
 ```
