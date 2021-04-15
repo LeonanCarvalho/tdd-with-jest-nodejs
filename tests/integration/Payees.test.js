@@ -13,69 +13,46 @@ describe('Payee Integration', () => {
     await truncate();
   });
 
-  it('should create a CPF Payee with valid data', async () => {
-    const payee = PayeeFactory.getPF();
+  it.each`
+     type
+     ${'PF'}
+     ${'PJ'}
+     // add new test cases here
+   `('should create a Payee with $type and valid data',
+    async ({ type }) => {
 
-    const payload = { 'payee': payee };
-    const response = await request(app)
-      .post('/payee')
-      .send(payload);
+      const payee = PayeeFactory[`get${type}`]();
 
-    expect(response.status)
-      .toBe(200);
-    expect(response.body.data.payee)
-      .toHaveProperty('id');
-    expect(response.body.data.payee.name)
-      .toBe(payee.name);
-    expect(response.body.data.payee.doc)
-      .toBe(payee.doc);
-    expect(response.body.data.payee.email)
-      .toBe(payee.email);
-    expect(response.body.data.payee.cod_bank)
-      .toBe(payee.cod_bank);
-    expect(response.body.data.payee.agency)
-      .toBe(payee.agency);
-    expect(response.body.data.payee.agency_digit)
-      .toBe(payee.agency_digit);
-    expect(response.body.data.payee.account)
-      .toBe(payee.account);
-    expect(response.body.data.payee.account_digit)
-      .toBe(payee.account_digit);
-    expect(response.body.data.payee.status)
-      .toBe(payee.status);
-  });
+      const payload = { 'payee': payee };
 
-  it('should create a CNPJ Payee with valid data', async () => {
-    const payee = PayeeFactory.getPJ();
+      const response = await request(app)
+        .post('/payee')
+        .send(payload);
 
-    const payload = { 'payee': payee };
-    const response = await request(app)
-      .post('/payee')
-      .send(payload);
-
-    expect(response.status)
-      .toBe(200);
-    expect(response.body.data.payee)
-      .toHaveProperty('id');
-    expect(response.body.data.payee.name)
-      .toBe(payee.name);
-    expect(response.body.data.payee.doc)
-      .toBe(payee.doc);
-    expect(response.body.data.payee.email)
-      .toBe(payee.email);
-    expect(response.body.data.payee.cod_bank)
-      .toBe(payee.cod_bank);
-    expect(response.body.data.payee.agency)
-      .toBe(payee.agency);
-    expect(response.body.data.payee.agency_digit)
-      .toBe(payee.agency_digit);
-    expect(response.body.data.payee.account)
-      .toBe(payee.account);
-    expect(response.body.data.payee.account_digit)
-      .toBe(payee.account_digit);
-    expect(response.body.data.payee.status)
-      .toBe(payee.status);
-  });
+      expect(response.status)
+        .toBe(200);
+      expect(response.body.data.payee)
+        .toHaveProperty('id');
+      expect(response.body.data.payee.name)
+        .toBe(payee.name);
+      expect(response.body.data.payee.doc)
+        .toBe(payee.doc);
+      expect(response.body.data.payee.email)
+        .toBe(payee.email);
+      expect(response.body.data.payee.cod_bank)
+        .toBe(payee.cod_bank);
+      expect(response.body.data.payee.agency)
+        .toBe(payee.agency);
+      expect(response.body.data.payee.agency_digit)
+        .toBe(payee.agency_digit);
+      expect(response.body.data.payee.account)
+        .toBe(payee.account);
+      expect(response.body.data.payee.account_digit)
+        .toBe(payee.account_digit);
+      expect(response.body.data.payee.status)
+        .toBe(payee.status);
+    }
+  );
 
   it('should fail to create a Payee  with invalid payload', async () => {
     const payload = {};
