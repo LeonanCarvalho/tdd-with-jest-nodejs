@@ -9,7 +9,7 @@ const { getRandomValue, strictFilter } = require('../../src/app/utils/ArrayUtils
 
 describe('Payee Integration', () => {
   afterAll(async () => {
-    //await truncate();
+    await truncate();
   });
 
   it('should create a CPF Payee with valid data', async () => {
@@ -173,17 +173,17 @@ describe('Payee Integration', () => {
   it('should delete Many Payee', async () => {
 
     let i = 0;
-    let payees = ['invalidID'];
+    let deleteIds = ['invalidID'];
     while (i < 5) {
       let payee = await PayeeFactory.create('PayeePJ', {});
-      payees.push(payee.id);
+      deleteIds.push(payee.id);
       i++;
     }
     const extraPayee = await PayeeFactory.create('PayeePF', {});
-    payees.push(extraPayee.id.toString());
+    deleteIds.push(extraPayee.id.toString());
 
-    const totalToDelete = payees.length - 1;
-    const payload = { 'payees': payees };
+    const totalToDelete = deleteIds.length - 1;
+    const payload = { 'payees': deleteIds };
     const response = await request(app)
       .delete(`/payee`)
       .send(payload);
