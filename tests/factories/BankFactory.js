@@ -3,7 +3,7 @@ const { Validator } = require('jsonschema');
 const { strictFilter } = require('../../src/app/utils/ArrayUtils');
 const { Banks } = require('../../src/app/data/banks');
 
-class bankFactory {
+class BankFactory {
 
   constructor(cod) {
     this.bank = strictFilter(Banks, 'cod', `${cod}`)[0];
@@ -29,7 +29,7 @@ class bankFactory {
      */
     if (!this.validateScheme(value, schema) && tries < 10) {
       tries++;
-      return this.generate(schema);
+      return this.generate(schema, tries);
     }
 
     return value;
@@ -81,4 +81,4 @@ class bankFactory {
 
 }
 
-module.exports = bankFactory;
+module.exports = BankFactory;

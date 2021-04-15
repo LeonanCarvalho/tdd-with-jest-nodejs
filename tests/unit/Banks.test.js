@@ -85,7 +85,7 @@ describe('Bank Service', () => {
   it('should throw error for invalid Banks', async () => {
     const cod = faker.lorem.slug;
     await expect(async () => {
-      return await BankService.get(cod);
+      return BankService.get(cod);
     })
       .rejects
       .toThrow(Error);

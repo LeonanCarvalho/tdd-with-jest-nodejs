@@ -164,7 +164,6 @@ describe('Payee Integration', () => {
           'search': fieldValue
         });
 
-      //console.log(response.body.data.rows, field, fieldValue);
       const result = strictFilter(response.body.data.rows, field, fieldValue);
 
       expect(response.body.data.rows.length)
