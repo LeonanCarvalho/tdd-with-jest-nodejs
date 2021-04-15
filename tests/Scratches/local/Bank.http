@@ -1,4 +1,4 @@
-GET http://localhost:3000/banks/Bank%20do%20Brasil
+GET http://localhost:3000/banks/Banco%20do%20Brasil
 
 ###
 GET http://localhost:3000/bank/001

@@ -29,3 +29,7 @@ yarn dev
 ## Deploy
 https://github.com/LeonanCarvalho/tdd-with-jest-nodejs/deployments
 
+
+## Endpoints
+
+https://github.com/LeonanCarvalho/tdd-with-jest-nodejs/tree/main/tests/Scratches/heroku

@@ -1,0 +1,108 @@
+
+//API Root
+
+GET https://tdd-express.herokuapp.com/
+
+###
+
+
+// Payees Listing
+GET https://tdd-express.herokuapp.com/payees
+
+###
+GET https://tdd-express.herokuapp.com/payees/1
+
+###
+GET https://tdd-express.herokuapp.com/payees/2
+
+###
+GET https://tdd-express.herokuapp.com/payees/3
+
+###
+GET https://tdd-express.herokuapp.com/payees/4
+
+###
+
+
+
+// Payees  Auto complete
+POST https://tdd-express.herokuapp.com/payees/
+Content-Type: application/json
+
+{
+  "search": "Costa "
+}
+
+###
+
+
+// Payee CRUD
+
+POST https://tdd-express.herokuapp.com/payee
+Content-Type: application/json
+
+{
+  "payee": {
+    "name": "Jhon Conor",
+    "doc": "472.060.270-32",
+    "email": "jhon.conor@gmail.com",
+    "cod_bank": "001",
+    "agency": "1234",
+    "agency_digit": "1",
+    "account": "00012345",
+    "account_digit": 1,
+    "status": "Rascunho"
+  }
+}
+
+###
+
+PUT https://tdd-express.herokuapp.com/payee/31
+Content-Type: application/json
+
+{
+  "payee": {
+    "email": "jhon.conor2@gmail.com",
+    "cod_bank": "001",
+    "doc": "781.134.390-80"
+  }
+}
+
+###
+
+GET https://tdd-express.herokuapp.com/payee/31
+
+###
+
+###
+DELETE https://tdd-express.herokuapp.com/payee/31
+
+###
+
+DELETE https://tdd-express.herokuapp.com/payee
+Content-Type: application/json
+
+{
+  "payees": [
+    10,
+    "12",
+    13,
+    null,
+    "gatinhos",
+    15,
+    33
+  ]
+}
+
+###
+
+//Bank Ops
+GET https://tdd-express.herokuapp.com/banks/Banco%20do%20Brasil
+
+###
+GET https://tdd-express.herokuapp.com/bank/001
+
+###
+GET https://tdd-express.herokuapp.com/banks
+
+###

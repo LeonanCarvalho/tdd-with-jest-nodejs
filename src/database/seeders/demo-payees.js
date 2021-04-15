@@ -7,7 +7,7 @@ module.exports = {
 
     let payees = [];
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 100; i++) {
       let type = faker.helpers.randomize(['PF', 'PJ']);
       const payee = PayeeFactory[`get${type}`]();
       payees.push(payee);

@@ -53,7 +53,7 @@ const defaultScheme = {
 let Banks = [
   {
     'cod': '001',
-    'name': 'Bank do Brasil'
+    'name': 'Banco do Brasil'
   },
   {
     'cod': '104',
