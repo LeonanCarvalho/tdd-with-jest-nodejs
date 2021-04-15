@@ -6,7 +6,7 @@
   "author": "Leonan Carvalho <j.leonancarvalho@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all",
+    "build": "yarn add sqlite3 sequelize-cli -D && sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all",
     "prestart": "sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js --ignore tests",
