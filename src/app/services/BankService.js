@@ -44,7 +44,6 @@ class BankService {
     const { scheme } = bank;
     let result = jp.query(scheme, path)[0] || {};
 
-    delete result.digit;
     return result;
   }
 
@@ -93,7 +92,15 @@ class BankService {
 
     const { scheme } = bank;
 
-    return scheme.accountType.allowedTypes.indexOf(account_type) !== -1;
+    const isValid = scheme.accountType.allowedTypes.indexOf(account_type) !== -1;
+
+    if (!isValid) {
+      let msg = 'Invalid Account Type, allowed values: \n';
+      msg += scheme.accountType.allowedTypes.join('\n');
+      throw new Error(msg);
+    }
+
+    return isValid;
   }
 
 }

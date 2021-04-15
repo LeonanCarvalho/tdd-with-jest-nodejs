@@ -4,7 +4,7 @@ const BankService = require('../../src/app/services/BankService');
 
 const BankFactory = require('../factories/BankFactory');
 
-describe('Bank Factory', () => {
+describe('Bank Validations', () => {
   it.each`
      cod
      ${'001'}
@@ -12,7 +12,7 @@ describe('Bank Factory', () => {
      ${'756'}
      ${'237'}
      // add new test cases here
-   `('should Generate Valid Bank code $cod',
+   `('should Bank Validation pass with valid data for Bank Cod $cod',
     async ({ cod }) => {
       const bank = new BankFactory(cod);
 
@@ -37,6 +37,39 @@ describe('Bank Factory', () => {
       await expect(BankService.validateAccountType(cod, accountType))
         .resolves
         .toBeTruthy();
+
+    });
+
+  it.each`
+     cod
+     ${'001'}
+     ${'104'}
+     ${'756'}
+     ${'237'}
+     // add new test cases here
+   `('should Bank Validation fails with valid data for Bank Cod $cod',
+    async ({ cod }) => {
+      const agency = faker.finance.bitcoinAddress();
+      const agencyDigit = faker.finance.bitcoinAddress();
+      const account = faker.finance.bitcoinAddress();
+      const accountDigit = faker.finance.bitcoinAddress();
+      const accountType = faker.finance.bitcoinAddress();
+
+      await expect(BankService.validateAgency(cod, agency))
+        .rejects
+        .toThrow();
+      await expect(BankService.validateAgencyDigit(cod, agencyDigit))
+        .rejects
+        .toThrow();
+      await expect(BankService.validateAccount(cod, account))
+        .rejects
+        .toThrow();
+      await expect(BankService.validateAccountDigit(cod, accountDigit))
+        .rejects
+        .toThrow();
+      await expect(BankService.validateAccountType(cod, accountType))
+        .rejects
+        .toThrow();
 
     });
 });
