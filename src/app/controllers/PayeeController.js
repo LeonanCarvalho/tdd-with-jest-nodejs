@@ -126,7 +126,6 @@ class PayeeController {
         this.errorEmitter('The Payee data is invalid');
       }
 
-
       let self = this;
       const sanitized = payees
         .filter((id) => {

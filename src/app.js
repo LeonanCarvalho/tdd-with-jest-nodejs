@@ -1,4 +1,4 @@
-const APP_ENV = process.env.NODE_ENV == 'test' ? '.env.test' : '.env';
+const APP_ENV = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 require('dotenv')
   .config({
     path: APP_ENV

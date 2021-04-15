@@ -34,7 +34,7 @@ class BankController {
   handleErrors(err, statusCode = 400) {
     return {
       status: statusCode,
-      messsage: err.message
+      message: err.message
     };
   }
 

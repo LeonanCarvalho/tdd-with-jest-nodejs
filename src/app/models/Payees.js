@@ -51,7 +51,7 @@ module.exports = (sequilize, DataTypes) => {
 
   async function isValidAccountType(account_type) {
     const { _changed, cod_bank } = this;
-    const hasChanged = _changed.has('account_digit');
+    const hasChanged = _changed.has('account_type');
     if (hasChanged) {
       await BankService.validateAccountType(cod_bank, account_type);
     }

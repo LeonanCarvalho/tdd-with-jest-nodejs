@@ -1,25 +1,16 @@
 const faker = require('faker-br');
 
+const PayeeFactory = require('../../../tests/factories/PayeeFactory');
+
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
 
     let payees = [];
 
     for (let i = 0; i < 30; i++) {
       let type = faker.helpers.randomize(['PF', 'PJ']);
-
-      payees.push({
-        name: type === 'PF' ? faker.name.findName() : faker.company.companyName(),
-        doc: type === 'PF' ? faker.br.cpf() : faker.br.cnpj(),
-        email: faker.internet.email(),
-        cod_bank: faker.helpers.randomize(['001', '104', '756', '237']),
-        agency: faker.finance.account(),
-        agency_digit: 1,
-        account: faker.finance.account(),
-        account_digit: 1,
-        account_type: faker.helpers.randomize(['CONTA_CORRENTE', 'CONTA_POUPANCA']),
-        status: faker.helpers.randomize(['Rascunho', 'Validado'])
-      });
+      const payee = PayeeFactory[`get${type}`]();
+      payees.push(payee);
 
     }
 
@@ -29,7 +20,7 @@ module.exports = {
       });
 
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.bulkDelete('payees', null, {});
   }
 };

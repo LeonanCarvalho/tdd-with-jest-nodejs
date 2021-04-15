@@ -8,6 +8,10 @@ const BankController = require('./app/controllers/BankController');
 routes.get('/', ((req, res, next) => {
   res.locals.status = 200;
   res.locals.message = 'ok';
+  const paths = routes.stack
+    .filter(r => r.route)
+    .map(r => r.route.path);
+  res.locals.result = { paths: paths };
   return next();
 }));
 

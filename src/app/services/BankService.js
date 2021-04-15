@@ -42,9 +42,7 @@ class BankService {
   async getScheme(cod, path) {
     const bank = await this.get(cod);
     const { scheme } = bank;
-    let result = jp.query(scheme, path)[0] || {};
-
-    return result;
+    return jp.query(scheme, path)[0] || {};
   }
 
   validateScheme(value, scheme) {
