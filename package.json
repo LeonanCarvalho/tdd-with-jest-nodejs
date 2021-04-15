@@ -10,7 +10,7 @@
     "prestart": "sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js --ignore tests",
-    "pretest": "set NODE_ENV=test&&sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all",
+    "pretest": "set NODE_ENV=test&&sequelize db:migrate:undo:all&&sequelize db:migrate",
     "test": "set NODE_ENV=test&&jest",
     "posttest": "set NODE_ENV=test&&sequelize db:migrate:undo:all",
     "seed": "sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all"

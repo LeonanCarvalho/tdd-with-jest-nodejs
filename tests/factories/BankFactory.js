@@ -6,6 +6,7 @@ const { Banks } = require('../../src/app/data/banks');
 class BankFactory {
 
   constructor(cod) {
+    this.validator = new Validator();
     this.bank = strictFilter(Banks, 'cod', `${cod}`)[0];
     if (!this.bank) {
       throw new TypeError('The bank cod provided is invalid');
@@ -13,8 +14,7 @@ class BankFactory {
   }
 
   validateScheme(value, scheme) {
-    const v = new Validator();
-    const validation = v.validate(value, scheme);
+    const validation = this.validator.validate(value, scheme);
 
     return !(validation.errors && validation.errors.length > 0);
   }
@@ -22,14 +22,8 @@ class BankFactory {
   generate(schema, tries = 0) {
     const value = jsf.generate(schema);
 
-    /**
-     * Infelizmente precisei fazer um workaround nesse teste,
-     * Parece que um rollback na lib causou o problema:
-     * https://github.com/json-schema-faker/json-schema-faker/issues/486
-     */
-    if (!this.validateScheme(value, schema) && tries < 20) {
-      tries++;
-      return this.generate(schema, tries);
+    if (!this.validateScheme(value, schema)) {
+      return `${value}`.replace('0', '1');
     }
 
     return value;

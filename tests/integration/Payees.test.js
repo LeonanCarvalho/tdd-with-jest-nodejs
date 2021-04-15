@@ -8,8 +8,8 @@ const PayeeFactory = require('../factories/PayeeFactory');
 const { getRandomValue, strictFilter } = require('../../src/app/utils/ArrayUtils');
 
 describe('Payee Integration', () => {
-  afterEach(async () => {
-    await truncate();
+  afterAll(async () => {
+    //await truncate();
   });
 
   it('should create a CPF Payee with valid data', async () => {
@@ -90,109 +90,6 @@ describe('Payee Integration', () => {
       .toBe(200);
     expect(response.body.data)
       .toHaveProperty('payee');
-    expect(response.body.data.payee.id)
-      .toBe(payee.id);
-  });
-
-  it.each`
-     page  | expectedResult
-     ${-1}  | ${10}
-     ${1}  | ${10}
-     ${2}  | ${1}
-     ${3}  | ${0}
-     // add new test cases here
-   `('Paginate Payees to $page',
-    async ({ page, expectedResult }) => {
-      const pageSize = 10;
-      const seedNumber = 11;
-      expect(seedNumber)
-        .toBeGreaterThan(pageSize);
-      const expectedPages = Math.ceil(seedNumber / pageSize);
-      let i = 0;
-      while (i < seedNumber) {
-        await PayeeFactory.create('PayeePJ', {});
-        i++;
-      }
-      const expectedPage = (page <= 0) ? 1 : page;
-      const url = (page === 1) ? '/payees' : `/payees/${page}`;
-      const response = await request(app)
-        .get(url)
-        .send();
-
-      expect(response.body.data)
-        .toHaveProperty('totalPages');
-      expect(response.body.data.totalPages)
-        .toBe(expectedPages);
-      expect(response.body.data)
-        .toHaveProperty('page');
-      expect(response.body.data.page)
-        .toBe(expectedPage);
-      expect(response.body.data)
-        .toHaveProperty('count');
-      expect(response.body.data.count)
-        .toBe(seedNumber);
-      expect(response.body.data)
-        .toHaveProperty('rows');
-      expect(response.body.data.rows.length)
-        .toBe(expectedResult);
-    }
-  );
-
-  it.each`
-     field
-     ${'name'}
-     ${'doc'}
-     ${'agency'}
-     ${'account'}
-     // add new test cases here
-   `('should get Payee auto complete by $field',
-    async ({ field }) => {
-      let i = 0;
-      let payees = [];
-      while (i < 3) {
-        payees.push(await PayeeFactory.create('PayeePJ', {}));
-        i++;
-      }
-
-      const fieldValue = getRandomValue(payees, field);
-
-      const response = await request(app)
-        .post('/payees')
-        .send({
-          'search': fieldValue
-        });
-
-      const result = strictFilter(response.body.data.rows, field, fieldValue);
-
-      expect(response.body.data.rows.length)
-        .toBeGreaterThan(0);
-      expect(result[0][field])
-        .toBe(fieldValue);
-    }
-  );
-
-  it('should get Payee data by Nome', async () => {
-    const payee = await PayeeFactory.create('PayeePJ', {});
-
-    expect(payee)
-      .toHaveProperty('id');
-
-    const response = await request(app)
-      .get(`/payee/${payee.id}`)
-      .send();
-
-    expect(response.status)
-      .toBe(200);
-    expect(response.body.data)
-      .toHaveProperty('payee');
-    expect(response.body.data.payee)
-      .toHaveProperty('id');
-    expect(response.body.data.payee)
-      .toHaveProperty('email');
-    expect(response.body.data.payee)
-      .toHaveProperty('name');
-    expect(response.body.data.payee)
-      .toHaveProperty('doc');
     expect(response.body.data.payee.id)
       .toBe(payee.id);
   });
@@ -297,6 +194,96 @@ describe('Payee Integration', () => {
       .toHaveProperty('data');
     expect(response.body.data.deletedRecord)
       .toBe(totalToDelete);
+  });
+
+  let payees = [];
+
+  describe('Payee List Pagination', () => {
+
+    beforeAll(async () => {
+      await truncate();
+      let i = 0;
+      const seedNumber = 11;
+      while (i < seedNumber) {
+        payees.push(await PayeeFactory.create('PayeePJ', {}));
+        i++;
+      }
+
+    });
+
+    afterAll(async () => {
+      await truncate();
+      payees = [];
+    });
+
+    it.each`
+     page  | expectedResult
+     ${-1}  | ${10}
+     ${1}  | ${10}
+     ${2}  | ${1}
+     ${3}  | ${0}
+     // add new test cases here
+   `('Paginate Payees to $page',
+      async ({ page, expectedResult }) => {
+        const pageSize = 10;
+        expect(payees.length)
+          .toBeGreaterThan(pageSize);
+        const expectedPages = Math.ceil(payees.length / pageSize);
+
+        const expectedPage = (page <= 0) ? 1 : page;
+        const url = (page === 1) ? '/payees' : `/payees/${page}`;
+        const response = await request(app)
+          .get(url)
+          .send();
+
+        expect(response.body.data)
+          .toHaveProperty('totalPages');
+        expect(response.body.data.totalPages)
+          .toBe(expectedPages);
+        expect(response.body.data)
+          .toHaveProperty('page');
+        expect(response.body.data.page)
+          .toBe(expectedPage);
+        expect(response.body.data)
+          .toHaveProperty('count');
+        expect(response.body.data.count)
+          .toBe(payees.length);
+        expect(response.body.data)
+          .toHaveProperty('rows');
+        expect(response.body.data.rows.length)
+          .toBe(expectedResult);
+      }
+    );
+
+    it.each`
+     field
+     ${'name'}
+     ${'doc'}
+     ${'agency'}
+     ${'account'}
+     // add new test cases here
+   `('should get Payee auto complete by $field',
+      async ({ field }) => {
+
+        const fieldValue = getRandomValue(payees, field);
+
+        const response = await request(app)
+          .post('/payees')
+          .send({
+            'search': fieldValue
+          });
+
+        const result = strictFilter(response.body.data.rows, field, fieldValue);
+
+        expect(response.status)
+          .toBe(200);
+        expect(response.body.data.rows.length)
+          .toBeGreaterThan(0);
+        expect(result[0][field])
+          .toBe(fieldValue);
+      }
+    );
+
   });
 
 });
