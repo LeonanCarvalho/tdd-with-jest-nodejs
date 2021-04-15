@@ -7,28 +7,21 @@ Content-Type: application/json
 
 {
   "payee": {
-    "name": "Jhon Conor",
-    "doc": "47206027032",
-    "email": "jhon.conor@gmail.com",
-    "cod_bank": "001",
-    "agency": "01234",
-    "agency_digit": "1",
-    "account": "00012345",
-    "account_digit": 1,
-    "status": "Rascunho"
+
   }
 }
 
 ###
 
 
-PUT http://localhost:3000/payee/39
+PUT http://localhost:3000/payee/null
 Content-Type: application/json
 
 {
   "payee": {
     "email": "jhon.conor2@gmail.com",
-    "cod_bank": "001"
+    "cod_bank": "001",
+    "doc": "1781.134.390-80"
   }
 }
 

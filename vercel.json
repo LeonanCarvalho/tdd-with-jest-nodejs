@@ -1,15 +1,22 @@
 {
   "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/app.js"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/view-source",
+      "destination": "https://github.com/LeonanCarvalho/tdd-with-jest-nodejs"
+    }
+  ],
   "builds": [
     {
       "src": "src/server.js",
       "use": "@now/node-server"
-    }
-  ],
-  "routes": [
-    {
-      "src": "(.*)",
-      "dest": "src/server.js"
     }
   ]
 }

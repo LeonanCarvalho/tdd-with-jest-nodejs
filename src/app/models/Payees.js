@@ -64,8 +64,15 @@ module.exports = (sequilize, DataTypes) => {
   };
 
   const Payee = sequilize.define('Payee', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: 'Please provide a valid Name'
@@ -74,18 +81,22 @@ module.exports = (sequilize, DataTypes) => {
     },
     doc: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         isValidDoc
       }
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
+      //unicode: true,
       validate: {
         isEmail: true
       }
     },
     cod_bank: {
       type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         isValidBank: isValidBank
       }
@@ -93,30 +104,35 @@ module.exports = (sequilize, DataTypes) => {
     },
     agency: {
       type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         isValidAgency: isValidAgency
       }
     },
     agency_digit: {
       type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         isValidAgencyDigit: isValidAgencyDigit
       }
     },
     account: {
       type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         isValidAccount: isValidAccount
       }
     },
     account_digit: {
       type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         isValidAccountDigit: isValidAccountDigit
       }
     },
     account_type: {
       type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         isValidAccountType: isValidAccountType
       }
@@ -124,6 +140,7 @@ module.exports = (sequilize, DataTypes) => {
     status: {
       type: DataTypes.ENUM('Rascunho', 'Validado'),
       defaultValue: 'Rascunho',
+      allowNull: false,
       validate: {
         isIn: {
           args: [['Rascunho', 'Validado']],
@@ -133,7 +150,22 @@ module.exports = (sequilize, DataTypes) => {
     }
   });
 
-  Payee.addHook('beforeUpdate', 'someCustomName', (payee, options) => {
+  const sanitizeData = (payee) => {
+    const patterns = {
+      doc: doc => {
+        return doc.replace(/([^\d])+/gim, '');
+      }
+    };
+
+    Object.keys(patterns)
+      .forEach(key => {
+        if (payee[key]) {
+          payee[key] = patterns[key](payee[key]);
+        }
+      });
+  };
+
+  const validateUpdate = (payee) => {
     return new Promise((resolve, reject) => {
       const isValidado = payee._previousDataValues.status === 'Validado';
       if (isValidado) {
@@ -149,7 +181,11 @@ module.exports = (sequilize, DataTypes) => {
       }
       resolve(true);
     });
-  });
+  };
+
+  Payee.addHook('beforeCreate', 'sanitizeData', sanitizeData);
+  Payee.addHook('beforeUpdate', 'sanitizeData', sanitizeData);
+  Payee.addHook('beforeUpdate', 'ValidateUpdate', validateUpdate);
 
   return Payee;
 };

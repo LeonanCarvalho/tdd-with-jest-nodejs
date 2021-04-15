@@ -1,5 +1,7 @@
+const faker = require('faker-br');
 const truncate = require('../utils/truncate');
 const PayeeFactory = require('../factories/PayeeFactory');
+const PayeeController = require('../../src/app/controllers/PayeeController');
 
 describe('Payee Unit', () => {
     afterAll(async () => {
@@ -16,6 +18,29 @@ describe('Payee Unit', () => {
         const payee = await PayeeFactory.create('PayeePJ');
         expect(payee)
           .toHaveProperty('id');
+    });
+
+    it('should throw erros ', () => {
+        expect(() => {
+            PayeeController.emitError('Test');
+        })
+          .toThrow();
+    });
+
+    it('should 1.1 should be 1 ', () => {
+        expect(PayeeController.normalizeId(1.1))
+          .toBe(1);
+    });
+
+    it('should -1 should be undefined ', () => {
+        expect(PayeeController.normalizeId(-1))
+          .toBeUndefined();
+    });
+
+    it('should string should be undefined ', () => {
+        const veryWeirdString = faker.finance.currencyCode() + faker.hacker.phrase();
+        expect(PayeeController.normalizeId(veryWeirdString))
+          .toBeUndefined();
     });
 
 });

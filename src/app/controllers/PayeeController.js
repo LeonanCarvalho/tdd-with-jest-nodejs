@@ -5,7 +5,7 @@ const { paginate } = require('../utils/SequelizeUtils');
 class PayeeController {
 
   validateId(paramId) {
-    return paramId && !isNaN(paramId);
+    return /^\d+$/.test(paramId);
   }
 
   normalizeId(paramId) {
@@ -21,7 +21,7 @@ class PayeeController {
 
   handleErrors(err) {
     let response = {
-      status: 400,
+      status: (err.message === 'Not Found') ? 404 : 400,
       messsage: '',
       errors: []
     };
@@ -30,7 +30,6 @@ class PayeeController {
         return { [e.path]: e.message };
       });
     }
-    response.status = 400;
     response.message = err.message;
 
     return response;
@@ -45,11 +44,6 @@ class PayeeController {
         this.emitError('The Payee data is invalid');
       }
       const storedPayee = await Payee.create(payee);
-
-      if (!storedPayee) {
-        this.emitError('Error to save Payee data');
-      }
-
       result = { payee: storedPayee };
       res.locals.status = 200;
     } catch (err) {
@@ -67,12 +61,8 @@ class PayeeController {
     try {
       const { id } = req.params;
 
-      if (!id) {
-        this.emitError('O ID do Payee está incorreto');
-      }
-
       if (!this.validateId(id)) {
-        this.emitError('O ID do Payee está inválido');
+        this.emitError('Invalid Payee ID');
       }
 
       const { payee } = req.body;
@@ -85,14 +75,10 @@ class PayeeController {
       const storedPayee = await Payee.findOne(condition);
 
       if (!storedPayee) {
-        this.emitError('Payee não encontrado');
+        this.emitError('Not Found');
       }
 
       const updatedPayee = await storedPayee.update(payee);
-
-      if (!updatedPayee) {
-        this.emitError('Falha ao atualizar payee');
-      }
 
       result = { payee: updatedPayee };
 
@@ -110,20 +96,17 @@ class PayeeController {
   async delete(req, res, next) {
     const { id } = req.params;
     try {
-      if (!id) {
-        this.emitError('O ID do Payee está incorreto');
-      }
 
       if (!this.validateId(id)) {
-        this.emitError('O ID do Payee está inválido');
+        this.emitError('Invalid Payee ID');
       }
       const condition = { where: { id: id } };
       const deletedRecord = await Payee.destroy(condition);
       if (deletedRecord === 1) {
         res.locals.status = 200;
-        res.locals.message = 'Payee Excluido com Sucesso';
+        res.locals.message = 'Payee Deleted';
       } else {
-        this.emitError('Payee não encontrado');
+        this.emitError('Not Found');
       }
     } catch (err) {
       const { status, message, errors } = this.handleErrors(err);
@@ -178,16 +161,16 @@ class PayeeController {
     let result;
     try {
       const { id } = req.params;
-      if (!id) {
-        this.emitError('O ID do Payee está incorreto');
-      }
 
       if (!this.validateId(id)) {
-        this.emitError('O ID do Payee está inválido');
+        this.emitError('Invalid Payee ID');
       }
 
       const payee = await Payee.findOne({ where: { id: id } });
-      res.locals.status = (payee) ? 200 : 404;
+      if (!payee) {
+        this.emitError('Not Found');
+      }
+      res.locals.status = 200;
       result = { payee: payee };
     } catch (err) {
       const { status, message, errors } = this.handleErrors(err);
@@ -228,30 +211,23 @@ class PayeeController {
       query.where[Op.or] = filter;
     }
 
-    try {
-      const payees = await Payee.findAndCountAll(
-        paginate(query,
-          {
-            page,
-            pageSize
-          }
-        )
-      );
-      res.locals.status = (payees) ? 200 : 404;
-      const total = payees.count || 0;
-      const totalPages = Math.ceil(total / pageSize);
-      result = {
-        ...{
-          totalPages: totalPages,
-          page: page + 1
-        }, ...payees
-      };
-    } catch (err) {
-      const { status, message, errors } = this.handleErrors(err);
-      res.locals.status = status;
-      res.locals.message = message;
-      result = errors;
-    }
+    const payees = await Payee.findAndCountAll(
+      paginate(query,
+        {
+          page,
+          pageSize
+        }
+      )
+    );
+    const total = payees.count || 0;
+    const totalPages = Math.ceil(total / pageSize);
+    result = {
+      ...{
+        totalPages: totalPages,
+        page: page + 1
+      }, ...payees
+    };
+    res.locals.status = (total === 0) ? 404 : 200;
     res.locals.result = result;
     return next();
   }
