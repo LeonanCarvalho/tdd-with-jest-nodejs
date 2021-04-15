@@ -292,9 +292,9 @@ describe('Payee Integration', () => {
 
   it('should delete Many Payee with invalid ids', async () => {
     let i = 0;
-    let deleteIds = [];
+    const deleteIds = [];
     while (i < 5) {
-      let invalidId = InvalidFactory.payee.id();
+      const invalidId = InvalidFactory.payee.id();
       deleteIds.push(invalidId);
       i++;
     }
@@ -405,11 +405,6 @@ describe('Payee Integration', () => {
       const response = await request(app)
         .post('/payees')
         .send(payload);
-
-      if (response.status == 200) {
-        console.log(payload);
-        console.log(response.body);
-      }
       expect(response.status)
         .toBe(404);
     });
