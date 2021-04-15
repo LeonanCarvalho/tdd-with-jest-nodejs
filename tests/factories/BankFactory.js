@@ -27,7 +27,7 @@ class BankFactory {
      * Parece que um rollback na lib causou o problema:
      * https://github.com/json-schema-faker/json-schema-faker/issues/486
      */
-    if (!this.validateScheme(value, schema) && tries < 10) {
+    if (!this.validateScheme(value, schema) && tries < 20) {
       tries++;
       return this.generate(schema, tries);
     }

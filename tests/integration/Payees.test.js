@@ -98,14 +98,13 @@ describe('Payee Integration', () => {
      page  | expectedResult
      ${-1}  | ${10}
      ${1}  | ${10}
-     ${2}  | ${10}
-     ${3}  | ${1}
-     ${4}  | ${0}
+     ${2}  | ${1}
+     ${3}  | ${0}
      // add new test cases here
    `('Paginate Payees to $page',
     async ({ page, expectedResult }) => {
       const pageSize = 10;
-      const seedNumber = 21;
+      const seedNumber = 11;
       expect(seedNumber)
         .toBeGreaterThan(pageSize);
       const expectedPages = Math.ceil(seedNumber / pageSize);
@@ -120,7 +119,6 @@ describe('Payee Integration', () => {
         .get(url)
         .send();
 
-      console.log(response.body);
       expect(response.body.data)
         .toHaveProperty('totalPages');
       expect(response.body.data.totalPages)
@@ -279,7 +277,7 @@ describe('Payee Integration', () => {
 
     let i = 0;
     let payees = ['invalidID'];
-    while (i < 30) {
+    while (i < 5) {
       let payee = await PayeeFactory.create('PayeePJ', {});
       payees.push(payee.id);
       i++;

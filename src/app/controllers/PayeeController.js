@@ -143,10 +143,8 @@ class PayeeController {
         this.emitError('The Payee data is invalid');
       }
 
-      console.log(payees);
 
       let self = this;
-      console.log(self);
       const sanitized = payees
         .filter((id) => {
           return self.validateId(id);
@@ -154,8 +152,6 @@ class PayeeController {
         .map((id) => {
           return self.normalizeId(id);
         });
-
-      console.log(sanitized);
 
       if (sanitized.length > 0) {
         let condition = { where: { id: {} } };
