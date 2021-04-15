@@ -16,7 +16,7 @@ class BankService {
   }
 
   async get(cod) {
-    let bank = strictFilter(Banks, 'cod', `${cod}`);
+    const bank = strictFilter(Banks, 'cod', `${cod}`);
     if (!bank || bank.length === 0) {
       this.errorEmitter('The Bank code provided is invalid');
     }
@@ -52,9 +52,12 @@ class BankService {
     if (validation.errors && validation.errors.length > 0) {
       let msg = '';
 
-      for (let i in validation.errors) {
-        let error = validation.errors[i];
+      let i = 0;
+      const len = validation.errors.length;
+      while (i < len) {
+        const error = validation.errors[i];
         msg += error.message + '\n';
+        i++;
       }
 
       throw new Error(`Validation error for ${value}: \n ${msg}`);
@@ -89,12 +92,12 @@ class BankService {
     return this.validateScheme(accountDigit, scheme);
   }
 
-  async validateAccountType(cod, account_type) {
+  async validateAccountType(cod, accountType) {
     const bank = await this.get(cod);
 
     const { scheme } = bank;
 
-    const isValid = scheme.accountType.allowedTypes.indexOf(account_type) !== -1;
+    const isValid = scheme.accountType.allowedTypes.indexOf(accountType) !== -1;
 
     if (!isValid) {
       let msg = 'Invalid Account Type, allowed values: \n';

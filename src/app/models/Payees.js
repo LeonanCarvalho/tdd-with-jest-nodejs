@@ -9,11 +9,11 @@ const BankService = require('../services/BankService');
  */
 module.exports = (sequilize, DataTypes) => {
 
-  async function isValidBank(cod_bank) {
+  async function isValidBank(codBank) {
     const { _changed } = this;
     const hasChanged = _changed.has('cod_bank');
     if (hasChanged) {
-      await BankService.get(cod_bank);
+      await BankService.get(codBank);
     }
   }
 
@@ -25,11 +25,11 @@ module.exports = (sequilize, DataTypes) => {
     }
   }
 
-  async function isValidAgencyDigit(agency_digit) {
+  async function isValidAgencyDigit(agencyDigit) {
     const { _changed, cod_bank } = this;
     const hasChanged = _changed.has('agency_digit');
     if (hasChanged) {
-      await BankService.validateAgencyDigit(cod_bank, agency_digit);
+      await BankService.validateAgencyDigit(cod_bank, agencyDigit);
     }
   }
 
@@ -41,19 +41,19 @@ module.exports = (sequilize, DataTypes) => {
     }
   }
 
-  async function isValidAccountDigit(account_digit) {
+  async function isValidAccountDigit(accountDigit) {
     const { _changed, cod_bank } = this;
     const hasChanged = _changed.has('account_digit');
     if (hasChanged) {
-      await BankService.validateAccountDigit(cod_bank, account_digit);
+      await BankService.validateAccountDigit(cod_bank, accountDigit);
     }
   }
 
-  async function isValidAccountType(account_type) {
+  async function isValidAccountType(accountType) {
     const { _changed, cod_bank } = this;
     const hasChanged = _changed.has('account_type');
     if (hasChanged) {
-      await BankService.validateAccountType(cod_bank, account_type);
+      await BankService.validateAccountType(cod_bank, accountType);
     }
   }
 
@@ -175,7 +175,7 @@ module.exports = (sequilize, DataTypes) => {
 
         const difference = symmetricDiff(allowedChanges, changed);
 
-        let hasOtherChanges = difference.length > 0;
+        const hasOtherChanges = difference.length > 0;
         if (hasOtherChanges) {
           reject(new Error('O Payee já foi validado, apenas o e-mail pode ser alterado.'));
         }

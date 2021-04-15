@@ -4,6 +4,14 @@ const { paginate } = require('../utils/SequelizeUtils');
 
 class PayeeController {
 
+  constructor() {
+    this.messages = {
+      invalidData: 'The Payee data is invalid',
+      invalidId: 'Invalid Payee ID',
+      notFound: 'Not Found'
+    };
+  }
+
   validateId(paramId) {
     return /^\d+$/.test(paramId);
   }
@@ -13,6 +21,7 @@ class PayeeController {
     if (this.validateId(id)) {
       return id;
     }
+    return null;
   }
 
   errorEmitter(msg) {
@@ -20,8 +29,8 @@ class PayeeController {
   }
 
   handleErrors(err) {
-    let response = {
-      status: (err.message === 'Not Found') ? 404 : 400,
+    const response = {
+      status: (err.message === this.messages.notFound) ? 404 : 400,
       messsage: '',
       errors: []
     };
@@ -41,7 +50,7 @@ class PayeeController {
     const { payee } = req.body;
     try {
       if (!payee) {
-        this.errorEmitter('The Payee data is invalid');
+        this.errorEmitter(this.messages.invalidData);
       }
       const storedPayee = await Payee.create(payee);
       result = { payee: storedPayee };
@@ -62,20 +71,20 @@ class PayeeController {
       const { id } = req.params;
 
       if (!this.validateId(id)) {
-        this.errorEmitter('Invalid Payee ID');
+        this.errorEmitter(this.messages.invalidId);
       }
 
       const { payee } = req.body;
 
       if (!payee) {
-        this.errorEmitter('The Payee data is invalid');
+        this.errorEmitter(this.messages.invalidData);
       }
 
       const condition = { where: { id: id } };
       const storedPayee = await Payee.findOne(condition);
 
       if (!storedPayee) {
-        this.errorEmitter('Not Found');
+        this.errorEmitter(this.messages.notFound);
       }
 
       const updatedPayee = await storedPayee.update(payee);
@@ -98,7 +107,7 @@ class PayeeController {
     try {
 
       if (!this.validateId(id)) {
-        this.errorEmitter('Invalid Payee ID');
+        this.errorEmitter(this.messages.invalidId);
       }
       const condition = { where: { id: id } };
       const deletedRecord = await Payee.destroy(condition);
@@ -106,7 +115,7 @@ class PayeeController {
         res.locals.status = 200;
         res.locals.message = 'Payee Deleted';
       } else {
-        this.errorEmitter('Not Found');
+        this.errorEmitter(this.messages.notFound);
       }
     } catch (err) {
       const { status, message, errors } = this.handleErrors(err);
@@ -123,10 +132,10 @@ class PayeeController {
       const { payees } = req.body;
 
       if (!payees) {
-        this.errorEmitter('The Payee data is invalid');
+        this.errorEmitter(this.messages.invalidData);
       }
 
-      let self = this;
+      const self = this;
       const sanitized = payees
         .filter((id) => {
           return self.validateId(id);
@@ -136,7 +145,7 @@ class PayeeController {
         });
 
       if (sanitized.length > 0) {
-        let condition = { where: { id: {} } };
+        const condition = { where: { id: {} } };
         condition.where.id[Op.in] = sanitized;
         result.deletedRecord = await Payee.destroy(condition);
         res.locals.status = 200;
@@ -162,12 +171,12 @@ class PayeeController {
       const { id } = req.params;
 
       if (!this.validateId(id)) {
-        this.errorEmitter('Invalid Payee ID');
+        this.errorEmitter(this.messages.invalidId);
       }
 
       const payee = await Payee.findOne({ where: { id: id } });
       if (!payee) {
-        this.errorEmitter('Not Found');
+        this.errorEmitter(this.messages.notFound);
       }
       res.locals.status = 200;
       result = { payee: payee };
@@ -182,7 +191,7 @@ class PayeeController {
   }
 
   async list(req, res, next) {
-    let result;
+    let result = {};
     const pageSize = 10;
     const searchableFields = ['name', 'doc', 'agency', 'account'];
 
@@ -198,10 +207,10 @@ class PayeeController {
     const query = { where: {} };
     if (req.body.search) {
       let i = 0;
-      let filter = [];
+      const filter = [];
       while (i < searchableFields.length) {
         const field = searchableFields[i];
-        let f = {};
+        const f = {};
         f[field] = {};
         f[field][Op.substring] = req.body.search;
         filter.push(f);

@@ -20,15 +20,11 @@ describe('Payee Integration', () => {
      // add new test cases here
    `('should create a Payee with $type and valid data',
     async ({ type }) => {
-
       const payee = PayeeFactory[`get${type}`]();
-
       const payload = { 'payee': payee };
-
       const response = await request(app)
         .post('/payee')
         .send(payload);
-
       expect(response.status)
         .toBe(200);
       expect(response.body.data.payee)
@@ -59,7 +55,6 @@ describe('Payee Integration', () => {
     const response = await request(app)
       .post('/payee')
       .send(payload);
-
     expect(response.status)
       .toBe(400);
     expect(response.body.data)
@@ -82,16 +77,12 @@ describe('Payee Integration', () => {
      // add new test cases here
    `('should fail to create a Payee  with invalid data at $field',
     async ({ field }) => {
-
       const payee = PayeeFactory.getPF();
-
       payee[field] = InvalidFactory.payee[field]();
-
       const payload = { 'payee': payee };
       const response = await request(app)
         .post('/payee')
         .send(payload);
-
       expect(response.status)
         .toBe(400);
       expect(response.body.data.length)
@@ -103,14 +94,11 @@ describe('Payee Integration', () => {
 
   it('should get Payee data', async () => {
     const payee = await PayeeFactory.create('PayeePJ', {});
-
     expect(payee)
       .toHaveProperty('id');
-
     const response = await request(app)
       .get(`/payee/${payee.id}`)
       .send();
-
     expect(response.status)
       .toBe(200);
     expect(response.body.data)
@@ -123,7 +111,6 @@ describe('Payee Integration', () => {
     const response = await request(app)
       .get(`/payee/-1<`)
       .send();
-
     expect(response.status)
       .toBe(400);
     expect(response.body.data)
@@ -147,13 +134,10 @@ describe('Payee Integration', () => {
     const payee = await PayeeFactory.create('PayeePJ', {
       'status': 'Rascunho'
     });
-
     expect(payee)
       .toHaveProperty('id');
-
     expect(payee.status)
       .toBe('Rascunho');
-
     const payload = {
       'payee': {
         doc: payee.doc,
@@ -164,10 +148,8 @@ describe('Payee Integration', () => {
     const response = await request(app)
       .put(`/payee/${payee.id}`)
       .send(payload);
-
     expect(response.status)
       .toBe(200);
-
     expect(response.body.data.payee.email)
       .toBe(payload.payee.email);
     expect(response.body.data.payee.name)
@@ -178,10 +160,8 @@ describe('Payee Integration', () => {
     const payee = await PayeeFactory.create('PayeePJ', {
       'status': 'Validado'
     });
-
     expect(payee)
       .toHaveProperty('id');
-
     const payload = {
       'payee': {
         status: payee.status,
@@ -189,14 +169,11 @@ describe('Payee Integration', () => {
         name: faker.name.findName()
       }
     };
-
     const response = await request(app)
       .put(`/payee/${payee.id}`)
       .send(payload);
-
     expect(response.status)
       .toBe(400);
-
     expect(response.body.message)
       .toBe('O Payee já foi validado, apenas o e-mail pode ser alterado.');
   });
@@ -209,7 +186,6 @@ describe('Payee Integration', () => {
     const response = await request(app)
       .put(`/payee/${payee.id}`)
       .send(payload);
-
     expect(response.status)
       .toBe(400);
     expect(response.body.data.length)
@@ -217,7 +193,6 @@ describe('Payee Integration', () => {
   });
 
   it('should fail to update a Payee  with invalid id ', async () => {
-
     const payload = {
       'payee': {
         doc: faker.br.cpf(),
@@ -228,7 +203,6 @@ describe('Payee Integration', () => {
     const response = await request(app)
       .put(`/payee/null`)
       .send(payload);
-
     expect(response.status)
       .toBe(400);
     expect(response.body.data.length)
@@ -236,7 +210,6 @@ describe('Payee Integration', () => {
   });
 
   it('should fail to update a Payee  that not exists', async () => {
-
     const payload = {
       'payee': {
         doc: faker.br.cpf(),
@@ -247,7 +220,6 @@ describe('Payee Integration', () => {
     const response = await request(app)
       .put(`/payee/999999999`)
       .send(payload);
-
     expect(response.status)
       .toBe(404);
     expect(response.body.data.length)
@@ -256,14 +228,11 @@ describe('Payee Integration', () => {
 
   it('should delete Payee', async () => {
     const payee = await PayeeFactory.create('PayeePF', {});
-
     expect(payee)
       .toHaveProperty('id');
-
     const response = await request(app)
       .delete(`/payee/${payee.id}`)
       .send();
-
     expect(response.status)
       .toBe(200);
     expect(response.body.status)
@@ -274,39 +243,32 @@ describe('Payee Integration', () => {
 
   it('should fail to should delete Payee  with invalid id', async () => {
     const payee = await PayeeFactory.create('PayeePF', {});
-
     expect(payee)
       .toHaveProperty('id');
-
     const response = await request(app)
       .delete(`/payee/nulll`)
       .send();
-
     expect(response.status)
       .toBe(400);
   });
 
   it('should fail to should delete Payee  that not exists', async () => {
     const payee = await PayeeFactory.create('PayeePF', {});
-
     expect(payee)
       .toHaveProperty('id');
-
     const response = await request(app)
       .delete(`/payee/9999999999`)
       .send();
-
     expect(response.status)
       .toBe(404);
   });
 
   it('should delete Many Payee', async () => {
-
     let i = 0;
-    let invalidIds = [];
-    let deleteIds = [];
+    const invalidIds = [];
+    const deleteIds = [];
     while (i < 5) {
-      let payee = await PayeeFactory.create('PayeePJ', {});
+      const payee = await PayeeFactory.create('PayeePJ', {});
       deleteIds.push(payee.id);
       let invalidId = InvalidFactory.payee.id();
       deleteIds.push(invalidId);
@@ -315,13 +277,11 @@ describe('Payee Integration', () => {
     }
     const extraPayee = await PayeeFactory.create('PayeePF', {});
     deleteIds.push(extraPayee.id.toString());
-
     const totalToDelete = deleteIds.length - invalidIds.length;
     const payload = { 'payees': deleteIds };
     const response = await request(app)
       .delete(`/payee`)
       .send(payload);
-
     expect(response.status)
       .toBe(200);
     expect(response.body)
@@ -331,7 +291,6 @@ describe('Payee Integration', () => {
   });
 
   it('should delete Many Payee with invalid ids', async () => {
-
     let i = 0;
     let deleteIds = [];
     while (i < 5) {
@@ -339,18 +298,15 @@ describe('Payee Integration', () => {
       deleteIds.push(invalidId);
       i++;
     }
-
     const payload = { 'payees': deleteIds };
     const response = await request(app)
       .delete(`/payee`)
       .send(payload);
-
     expect(response.status)
       .toBe(400);
   });
 
   it('should delete Many Payee with invalid payload', async () => {
-
     const payload = {};
     const response = await request(app)
       .delete(`/payee`)
@@ -363,7 +319,6 @@ describe('Payee Integration', () => {
   let payees = [];
 
   describe('Payee List Pagination', () => {
-
     beforeAll(async () => {
       await truncate();
       let i = 0;
@@ -399,7 +354,6 @@ describe('Payee Integration', () => {
         const response = await request(app)
           .get(url)
           .send();
-
         expect(response.body.data)
           .toHaveProperty('totalPages');
         expect(response.body.data.totalPages)
@@ -428,17 +382,13 @@ describe('Payee Integration', () => {
      // add new test cases here
    `('should get Payee auto complete by $field',
       async ({ field }) => {
-
         const fieldValue = getRandomValue(payees, field);
-
         const response = await request(app)
           .post('/payees')
           .send({
             'search': fieldValue
           });
-
         const result = strictFilter(response.body.data.rows, field, fieldValue);
-
         expect(response.status)
           .toBe(200);
         expect(response.body.data.rows.length)

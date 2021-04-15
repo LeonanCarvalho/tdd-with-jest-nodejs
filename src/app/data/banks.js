@@ -50,7 +50,7 @@ const defaultScheme = {
   }
 };
 
-let Banks = [
+const Banks = [
   {
     'cod': '001',
     'name': 'Banco do Brasil'
@@ -69,10 +69,10 @@ let Banks = [
   }
 ];
 
-let i = 0,
-  len = Banks.length;
+const len = Banks.length;
+let i = 0;
 while (i < len) {
-  let cod = Banks[i].cod;
+  const cod = Banks[i].cod;
   Banks[i].scheme = Schemes[cod] || defaultScheme;
   i++;
 }

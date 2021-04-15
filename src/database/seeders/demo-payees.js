@@ -5,13 +5,13 @@ const PayeeFactory = require('../../../tests/factories/PayeeFactory');
 module.exports = {
   up: async (queryInterface) => {
 
-    let payees = [];
-
-    for (let i = 0; i < 100; i++) {
-      let type = faker.helpers.randomize(['PF', 'PJ']);
+    const payees = [];
+    let i = 0;
+    while (i < 100) {
+      const type = faker.helpers.randomize(['PF', 'PJ']);
       const payee = PayeeFactory[`get${type}`]();
       payees.push(payee);
-
+      i++;
     }
 
     return queryInterface.bulkInsert('payees', payees, { validate: true })

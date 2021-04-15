@@ -31,7 +31,7 @@ class BankFactory {
 
   agency() {
     const { agency } = this.bank.scheme;
-    let schema = {
+    const schema = {
       type: 'string',
       maxLength: agency.maxLength,
       pattern: agency.pattern,
@@ -41,7 +41,7 @@ class BankFactory {
 
   agencyDigit() {
     const { agency } = this.bank.scheme;
-    let schema = {
+    const schema = {
       type: 'string',
       ...agency.digit
     };
@@ -50,7 +50,7 @@ class BankFactory {
 
   account() {
     const { account } = this.bank.scheme;
-    let schema = {
+    const schema = {
       type: 'string',
       maxLength: account.maxLength,
       pattern: account.pattern,
@@ -60,7 +60,7 @@ class BankFactory {
 
   accountDigit() {
     const { account } = this.bank.scheme;
-    let schema = {
+    const schema = {
       type: 'string',
       ...account.digit,
     };

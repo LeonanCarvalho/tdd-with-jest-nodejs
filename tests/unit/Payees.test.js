@@ -32,15 +32,15 @@ describe('Payee Unit', () => {
           .toBe(1);
     });
 
-    it('should -1 should be undefined ', () => {
+    it('should -1 should be falsy ', () => {
         expect(PayeeController.normalizeId(-1))
-          .toBeUndefined();
+          .toBeFalsy();
     });
 
-    it('should string should be undefined ', () => {
+    it('should string should be falsy ', () => {
         const veryWeirdString = faker.finance.currencyCode() + faker.hacker.phrase();
         expect(PayeeController.normalizeId(veryWeirdString))
-          .toBeUndefined();
+          .toBeFalsy();
     });
 
 });
