@@ -10,9 +10,10 @@ const BankService = require('../services/BankService');
 module.exports = (sequilize, DataTypes) => {
 
   async function isValidBank(cod_bank) {
-    const cod = await BankService.get(cod_bank);
-    if (!cod) {
-      throw new Error('Invalid Bank Code');
+    const { _changed } = this;
+    const hasChanged = _changed.has('cod_bank');
+    if (hasChanged) {
+      await BankService.get(cod_bank);
     }
   }
 
@@ -98,7 +99,7 @@ module.exports = (sequilize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isValidBank: isValidBank
+        isValidBank
       }
 
     },
@@ -106,35 +107,35 @@ module.exports = (sequilize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isValidAgency: isValidAgency
+        isValidAgency
       }
     },
     agency_digit: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isValidAgencyDigit: isValidAgencyDigit
+        isValidAgencyDigit
       }
     },
     account: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isValidAccount: isValidAccount
+        isValidAccount
       }
     },
     account_digit: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isValidAccountDigit: isValidAccountDigit
+        isValidAccountDigit
       }
     },
     account_type: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isValidAccountType: isValidAccountType
+        isValidAccountType
       }
     },
     status: {

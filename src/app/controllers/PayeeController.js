@@ -15,7 +15,7 @@ class PayeeController {
     }
   }
 
-  emitError(msg) {
+  errorEmitter(msg) {
     throw new TypeError(msg);
   }
 
@@ -41,7 +41,7 @@ class PayeeController {
     const { payee } = req.body;
     try {
       if (!payee) {
-        this.emitError('The Payee data is invalid');
+        this.errorEmitter('The Payee data is invalid');
       }
       const storedPayee = await Payee.create(payee);
       result = { payee: storedPayee };
@@ -62,20 +62,20 @@ class PayeeController {
       const { id } = req.params;
 
       if (!this.validateId(id)) {
-        this.emitError('Invalid Payee ID');
+        this.errorEmitter('Invalid Payee ID');
       }
 
       const { payee } = req.body;
 
       if (!payee) {
-        this.emitError('The Payee data is invalid');
+        this.errorEmitter('The Payee data is invalid');
       }
 
       const condition = { where: { id: id } };
       const storedPayee = await Payee.findOne(condition);
 
       if (!storedPayee) {
-        this.emitError('Not Found');
+        this.errorEmitter('Not Found');
       }
 
       const updatedPayee = await storedPayee.update(payee);
@@ -98,7 +98,7 @@ class PayeeController {
     try {
 
       if (!this.validateId(id)) {
-        this.emitError('Invalid Payee ID');
+        this.errorEmitter('Invalid Payee ID');
       }
       const condition = { where: { id: id } };
       const deletedRecord = await Payee.destroy(condition);
@@ -106,7 +106,7 @@ class PayeeController {
         res.locals.status = 200;
         res.locals.message = 'Payee Deleted';
       } else {
-        this.emitError('Not Found');
+        this.errorEmitter('Not Found');
       }
     } catch (err) {
       const { status, message, errors } = this.handleErrors(err);
@@ -123,7 +123,7 @@ class PayeeController {
       const { payees } = req.body;
 
       if (!payees) {
-        this.emitError('The Payee data is invalid');
+        this.errorEmitter('The Payee data is invalid');
       }
 
 
@@ -163,12 +163,12 @@ class PayeeController {
       const { id } = req.params;
 
       if (!this.validateId(id)) {
-        this.emitError('Invalid Payee ID');
+        this.errorEmitter('Invalid Payee ID');
       }
 
       const payee = await Payee.findOne({ where: { id: id } });
       if (!payee) {
-        this.emitError('Not Found');
+        this.errorEmitter('Not Found');
       }
       res.locals.status = 200;
       result = { payee: payee };

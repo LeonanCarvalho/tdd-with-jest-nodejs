@@ -124,4 +124,13 @@ describe('Bank Service', () => {
       .toThrow(Error);
   });
 
+  it('should throw error for invalid Banks', async () => {
+    const cod = faker.lorem.slug;
+    await expect(async () => {
+      return BankService.get(cod);
+    })
+      .rejects
+      .toThrow(Error);
+  });
+
 });

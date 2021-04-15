@@ -18,7 +18,7 @@ class BankService {
   async get(cod) {
     let bank = strictFilter(Banks, 'cod', `${cod}`);
     if (!bank || bank.length === 0) {
-      throw new Error('The bank cod provided is invalid');
+      this.errorEmitter('The Bank code provided is invalid');
     }
     return bank[0];
   }
@@ -65,6 +65,10 @@ class BankService {
 
     return true;
 
+  }
+
+  errorEmitter(msg) {
+    throw new TypeError(msg);
   }
 
   async validateAgency(cod, agencyValue) {
