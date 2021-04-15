@@ -10,8 +10,7 @@
     "heroku"
   ],
   "scripts": {
-    "build": "yarn add sqlite3 sequelize-cli -D && sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all",
-    "prestart": "sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all",
+    "build": "sequelize db:migrate:undo:all&&sequelize db:migrate&&yarn sequelize-cli db:seed:all",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js --ignore tests",
     "pretest": "set NODE_ENV=test&&sequelize db:migrate:undo:all&&sequelize db:migrate",
