@@ -1,6 +1,6 @@
 # Study case: Api based on express with jest for testing
 
-This repo contains a small api project with CI/CD using github actions and deploy in a serveless env (vercel) and docker env (heroku)
+This repo contains a small api project with CI/CD using github actions and deploy in a serveless env (vercel) and docker env (heroku) with study purpose.
 
 
 [![Testes E2E](https://github.com/LeonanCarvalho/tdd-with-jest-nodejs/actions/workflows/e2e-tests.yml/badge.svg)](https://github.com/LeonanCarvalho/tdd-with-jest-nodejs/actions/workflows/e2e-tests.yml)
